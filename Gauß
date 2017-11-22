@@ -1,0 +1,98 @@
+import java.util.Scanner;
+
+//Aufgabe 2:
+public class Gaussalgorithmus
+{
+	    public static double[] loese(double[][] A, double[] b,int n)
+	    {
+	    	//suche das Pivotelement p
+	        for (int p = 0; p < n; p++)
+	        {
+	            // finde die Zeile mit dem Pivotelement p 
+	            int max = p;
+	            for (int i = p + 1 ; i < n; i++) 
+	            {
+		                if (Math.abs(A[i][p]) > Math.abs(A[max][p])) 
+	                {
+	                    max = i;
+	                }
+	            }
+	            
+	            //tausche Zeile in der Matrix A und gleichzeitig im Zielvektor b mit dem Maximum max
+	            double[] temp = A[p]; 
+	            A[p] = A[max]; 
+	            A[max] = temp;
+	            
+	            double t = b[p];
+	            b[p] = b[max]; 
+	            b[max] = t;
+
+	            // Matrix kleiner Nachkommastelle 3 -> nicht loesbar, da 0 als Pivot erkannt wurde
+	            if (Math.abs(A[p][p]) <= 1e-3) 
+	            {
+	                throw new ArithmeticException("Matrix ist nicht loesbar oder hat unendlich Loesungen");
+	            }
+
+	            /* Pivotelement p innerhalb von A und b
+	            siehe Theorie:  
+	            suche das Pivotelement in Zeile z
+	            */
+	            for (int i = p + 1 ; i < n; i++) 
+	            {
+	                double faktor = A[i][p] / A[p][p];
+	                	b[i] -= faktor * b[p];
+	                for (int j = p; j < n; j++)
+	                {
+	                    A[i][j] -= faktor * A[p][j];
+	                }
+	            }
+	        }
+
+	        //Von xn anfangend die werte in den Vektor x einsetzen
+	        double[] x = new double[n];
+	        
+	        for (int i = n - 1; i >= 0; i--) 
+	        {
+	            double summe = 0.0;
+	            for (int j = i + 1; j < n; j++) 
+	            {
+	                summe += A[i][j] * x[j];
+	            }
+	            x[i] = (b[i] - summe) / A[i][i];
+	   	}
+	        return x;
+	    }
+	
+  //moegliche Main
+	public static void main(String[] args) 
+	{
+		//Tastaturscanner fuer die Eingabe
+		Scanner sc = new Scanner (System.in);
+		System.out.println("Bitte n eingeben:");
+		int n = sc.nextInt();
+		double [][] A = new double [n][n];
+		double [] b = new double [n];
+		for (int j = 0; j < n; j++)
+		{
+			for (int i = 0; i < n; i++)
+			{
+			System.out.println("Bitte die Zahlen der Matrix eingeben (Spalten nacheinander zuerst):");
+			A [i][j] = sc.nextInt();
+			}
+		}
+		for (int k = 0; k<n; k++)
+		{
+			System.out.println("Bitte die Zahlen des Zielvektors eingeben:");
+			b [k] = sc.nextInt();
+		}
+		sc.close();
+		double [] x = loese(A,b,n);
+		System.out.println("die Lösung für x1 bis xn lautet:");
+		for (int l = 0; l < n; l++) 
+        {
+            System.out.println(x[l]);
+        }
+		
+	}
+
+}
