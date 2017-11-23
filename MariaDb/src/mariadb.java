@@ -17,8 +17,8 @@ public class mariadb
 					(
 					"select distinct aid, sum(dollars) as sum " +
 					"from orders " +
-					"where pid = " + "'" + pid + "'" +
-					" group by aid " +
+					"where pid = " + "'" + pid + "' " +
+					"group by aid " +
 					"order by sum desc;"
 					);
 			while(rs.next()) 
