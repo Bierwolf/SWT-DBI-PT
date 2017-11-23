@@ -1,7 +1,8 @@
 import java.sql.*;
 import java.util.Scanner;
 
-public class mariadb {
+public class mariadb 
+{
 	public static void main (String args[]) 
 	{
 		try 
@@ -25,9 +26,9 @@ public class mariadb {
 				System.out.println(rs.getString("aid") + " " + rs.getString("sum") );
 			}
 			conn.close();
-		} catch (SQLException e) 
+		} 
+		catch (SQLException e) 
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
