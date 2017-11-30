@@ -1,1 +1,1 @@
-Die links zur Databse müssen eventuell angepasst werden.
+Die links zur Database müssen eventuell angepasst werden.
