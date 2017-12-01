@@ -21,7 +21,7 @@ public class Calendar
     	int Tag = kalender.get(kalender.DAY_OF_MONTH);
         int Monat = kalender.get(kalender.MONTH);    
         int Jahr = kalender.get(kalender.YEAR);
-        int Starttag = kalender.getFirstDayOfWeek();
+        int Starttag = kalender.getMinimalDaysInFirstWeek();
         
         //Monatsnamen
         String[] Monate = 
