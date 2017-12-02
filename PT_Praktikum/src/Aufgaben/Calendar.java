@@ -23,12 +23,6 @@ public class Calendar
         int Jahr = kalender.get(kalender.YEAR);
         int Starttag = kalender.getMinimalDaysInFirstWeek();
         
-        //Monatsnamen
-        String[] Monate = 
-        	{                         
-                "Januar", "Februar", "Maerz", "April", "Mai", "Juni", "Juli", "August", "September", "Oktober", "November", "Dezember"
-            };
-        
         // Tagesanzahl in den Monaten
         int[] Tage = 
         	{
@@ -39,17 +33,15 @@ public class Calendar
         if (Monat == 1 && Schaltjahr(Jahr)) 
         	Tage[Monat] = 29;
 
-        // Kalenderausgabe
-        System.out.println(Monate[Monat] + " " + Jahr);
-        System.out.println("Mo  Di  Mi  Do  Fr  Sa  So");
+        // Kalenderausgabe, welche auf die Einstellungen der JVM basiert
         for (int i = 0; i < Starttag; i++)
             System.out.print("    ");
         for (int i = 1; i <= Tage[Monat]; i++) 
         {
         	if (i == Tag)
-            	System.out.printf("%2d* ", i);
+            	System.out.printf(" %2d*", i);
         	else 
-        		System.out.printf("%2d  ", i);
+        		System.out.printf(" %2d ", i);
             if (((i + Starttag) % 7 == 0) || (i == Tage[Monat])) 
             	System.out.println();
         }
