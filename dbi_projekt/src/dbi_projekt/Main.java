@@ -1,5 +1,7 @@
 package dbi_projekt;
 
+import java.io.*;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -11,12 +13,16 @@ public class Main {
 		table.deleteTables();
 		table.createTables();
 		
-		long start, ende;
+		long start, ende, startwrite, endwrite;
 		int n = 1; //Anzahl d. Durchgänge
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
 		
 		table.fill(n);
+		
+		Writer writer = null;
+
+		
 		
 		ende = System.currentTimeMillis();
 		System.out.println ("Anzahl Durchgänge: " + n);
