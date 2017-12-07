@@ -17,7 +17,6 @@ public class Main {
 		
 		ende = System.currentTimeMillis();
 		System.out.println (n + ": " + (ende - start) + "ms");
-		table.deleteTables();
 	}
 
 }
