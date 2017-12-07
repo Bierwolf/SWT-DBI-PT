@@ -8,20 +8,54 @@ public class Create_DB
 	static final String PASS = "dbi_pass";
 	static final String CON_URL = "jdbc:mariadb://localhost:3306/";
 	static final String CON_URL_DB = "jdbc:mariadb://localhost:3306/benchmark";
+	static final String CON_REMOTE = "jdbc:mariadb://192.168.122.43:3306/";
+	static final String CON_REMOTE_DB = "jdbc:mariadb://192.168.122.43:3306/benchmark";
 	
 	void createDatabase()
 	{	
 		Connection conn = null;
 		Statement stmt = null;
-		 
-		String create_database = "CREATE DATABASE IF NOT EXISTS benchmark";
 		
 		try {
-			System.out.println("Connecting to a selected database...");
-			conn = DriverManager.getConnection(CON_URL, USER, PASS);
+			System.out.println("Creating DB..");
+			//conn = DriverManager.getConnection(CON_URL, USER, PASS);
+			conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
-			stmt.executeUpdate(create_database);
+			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS benchmark");
+			stmt.executeUpdate("SET @@session.unique_checks = 0;");
+			stmt.executeUpdate("SET @@session.foreign_key_checks = 0;");
+			conn.commit();
+			conn.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Connection failed!");
+			e.printStackTrace();
+		}
+		finally {
+			try	{
+				if (stmt != null)
+					conn.close();
+				}
+			catch (SQLException se) {
+				// TODO Auto-generated catch block
+			}
+		}
+	}
+	void deleteDatabase()
+	{	
+		Connection conn = null;
+		Statement stmt = null;
+		
+		try {
+			System.out.println("Deleting DB..");
+			//conn = DriverManager.getConnection(CON_URL, USER, PASS);
+			conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			conn.setAutoCommit (false);
+			stmt = conn.createStatement();
+			stmt.executeUpdate("DROP DATABASE IF EXISTS benchmark");
+			
 			conn.commit();
 			conn.close();
 			
@@ -87,8 +121,9 @@ public class Create_DB
 		 			"foreign key (branchid) references branches(branchid));"
 				 ;
 		try {
-			System.out.println("Connecting to a selected database...");
-			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			System.out.println("Creating tables..");
+			//conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate (table_branches);
@@ -126,8 +161,9 @@ public class Create_DB
 		String drop_history = "DROP TABLE IF EXISTS history;";
 		
 		try {
-			System.out.println("Connecting to a selected database...");
-			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			System.out.println("Deleting tables..");
+			//conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate (drop_history);
@@ -176,7 +212,8 @@ public class Create_DB
 		
 		try
 		{
-			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			//conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			for (int i = 1; i <= n; i++)
