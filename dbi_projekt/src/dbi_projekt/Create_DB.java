@@ -1,5 +1,10 @@
 package dbi_projekt;
 
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.sql.*;
 
 public class Create_DB 
@@ -18,8 +23,8 @@ public class Create_DB
 		
 		try {
 			System.out.println("Creating DB..");
-			//conn = DriverManager.getConnection(CON_URL, USER, PASS);
-			conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			conn = DriverManager.getConnection(CON_URL, USER, PASS);
+			//conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS benchmark");
@@ -50,8 +55,8 @@ public class Create_DB
 		
 		try {
 			System.out.println("Deleting DB..");
-			//conn = DriverManager.getConnection(CON_URL, USER, PASS);
-			conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			conn = DriverManager.getConnection(CON_URL, USER, PASS);
+			//conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DROP DATABASE IF EXISTS benchmark");
@@ -122,8 +127,8 @@ public class Create_DB
 				 ;
 		try {
 			System.out.println("Creating tables..");
-			//conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate (table_branches);
@@ -162,8 +167,8 @@ public class Create_DB
 		
 		try {
 			System.out.println("Deleting tables..");
-			//conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate (drop_history);
@@ -207,13 +212,22 @@ public class Create_DB
 		String adress_teller = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
 		String cmmnt = "AbcdefghijklmnopqrstuvwxyzAbcd";
 		String insert = null ;
+		
+		Writer writer = null;
 				
 		int rndm = 0;
 		
+		try {
+		    writer = new BufferedWriter(new OutputStreamWriter(
+		          new FileOutputStream("filename.txt"), "utf-8"));
+		} catch (IOException ex) {
+		  // report
+		} 
+		
 		try
 		{
-			//conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			for (int i = 1; i <= n; i++)
@@ -230,6 +244,7 @@ public class Create_DB
 				
 				//insert = ("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
 				stmt.executeUpdate("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
+				writer.write("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
 				//(int) Math.random();
 			}
 			conn.commit();
@@ -248,6 +263,10 @@ public class Create_DB
 		catch (SQLException se) {
 			se.printStackTrace();
 			// TODO Auto-generated catch block
-		}
+		}catch (IOException ex) {
+			  // report
+			} finally {
+			   try {writer.close();} catch (Exception ex) {/*ignore*/}
+			}
 	}
 }
