@@ -16,7 +16,11 @@ public class Main {
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
 		
+<<<<<<< HEAD
 		table.fill(n);
+=======
+		table.fill(1);
+>>>>>>> branch 'master' of https://github.com/Bierwolf/swt-dbi-pt
 		
 		ende = System.currentTimeMillis();
 		System.out.println ("Anzahl Durchgänge: " + n);
