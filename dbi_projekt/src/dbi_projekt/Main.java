@@ -14,7 +14,7 @@ public class Main {
 		int n = 0;
 		start = System.currentTimeMillis();
 		
-		table.fill(50);
+		table.fill(1);
 		
 		ende = System.currentTimeMillis();
 		System.out.println (n + ": " + (ende - start) + "ms");
