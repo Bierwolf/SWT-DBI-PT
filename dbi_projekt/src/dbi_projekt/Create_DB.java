@@ -6,18 +6,19 @@ public class Create_DB
 {
 	static final String USER = "dbi";
 	static final String PASS = "dbi_pass";
-	static final String CONURL = "jdbc:mariadb://127.0.0.1:3306/benchmark";
+	static final String CON_URL = "jdbc:mariadb://127.0.0.1:3306/";
+	static final String CON_URL_DB = "jdbc:mariadb://127.0.0.1:3306/benchmark";
 	
 	void createDatabase()
 	{	
 		Connection conn = null;
 		Statement stmt = null;
 		 
-		String create_database = "CREATE DATABASE benchmark";
+		String create_database = "CREATE DATABASE benchmark IF NOT EXISTS benchmarkf";
 		
 		try {
 			System.out.println("Connecting to a selected database...");
-			conn = DriverManager.getConnection(CONURL, USER, PASS);
+			conn = DriverManager.getConnection(CON_URL, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate(create_database);
@@ -84,7 +85,7 @@ public class Create_DB
 				 ;
 		try {
 			System.out.println("Connecting to a selected database...");
-			conn = DriverManager.getConnection(CONURL, USER, PASS);
+			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			affected = stmt.executeUpdate ((table_branches + table_accounts + table_tellers + table_history));
@@ -122,7 +123,7 @@ public class Create_DB
 		
 		try {
 			System.out.println("Connecting to a selected database...");
-			conn = DriverManager.getConnection(CONURL, USER, PASS);
+			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate((drop_branches + drop_accounts + drop_tellers + drop_history));
@@ -161,7 +162,7 @@ public class Create_DB
 		
 		try
 		{
-			conn = DriverManager.getConnection(CONURL, USER, PASS);
+			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			for (int i = 1; i <= n; i++)
