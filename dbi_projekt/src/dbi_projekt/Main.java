@@ -6,14 +6,15 @@ public class Main {
 		// TODO Auto-generated method stub
 		Create_DB table = new Create_DB();
 		
-		table.createDatabase();
+		//table.createDatabase();
+		table.deleteTables();
 		table.createTables();
 		
 		long start, ende;
 		int n = 0;
 		start = System.currentTimeMillis();
 		
-		
+		table.fill(50);
 		
 		ende = System.currentTimeMillis();
 		System.out.println (n + ": " + (ende - start) + "ms");

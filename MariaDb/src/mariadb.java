@@ -9,6 +9,7 @@ public class mariadb
 		{
 			Scanner sc = new Scanner(System.in);
 			Connection conn = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/test", "dbi", "dbi_pass");
+			conn.setAutoCommit (false);
 			Statement stmt = conn.createStatement();
 			System.out.println("Bitte ProduktID angeben");
 			String pid = sc.nextLine();
