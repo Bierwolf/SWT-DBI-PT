@@ -228,7 +228,7 @@ public class Create_DB
 			    writer = new BufferedWriter(new OutputStreamWriter(
 			          new FileOutputStream("branches.txt"), "utf-8"));
 			} catch (IOException ex) {
-			  // report
+			  ex.printStackTrace();
 			} 
 			
 			for (int i = 1; i <= n; i++)
@@ -238,6 +238,7 @@ public class Create_DB
 				writer.write(i + ","+ branchname + ",0" +  "," + adress_branches + ";");
 				//(int) Math.random();
 			}
+			writer.flush();
 			conn.commit();
 			
 			try {
@@ -255,6 +256,10 @@ public class Create_DB
 				//stmt.executeUpdate("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
 				writer.write(i + "," + name_account + ",0" +  ","	+ rndm + ","+ adress_accounts + ";");
 				//(int) Math.random();
+				if(i%500000 == 0)
+				{
+					writer.flush();
+				}
 			}
 			conn.commit();
 			
@@ -273,6 +278,7 @@ public class Create_DB
 				//stmt.executeUpdate("insert into tellers values ("+i + ","+ "'" + name_teller +  "'"+ ", 0" +  ","+ rndm + ","+ "'" + adress_teller + "');");
 				writer.write(i + ","+  name_teller + ",0" +  ","+ rndm + ","+ adress_teller + ";");
 			}
+			writer.flush();
 			
 			conn.commit();
 			conn.close();
@@ -281,9 +287,9 @@ public class Create_DB
 			se.printStackTrace();
 			// TODO Auto-generated catch block
 		}catch (IOException ex) {
-			  // report
-			} finally {
-			   try {writer.close();} catch (Exception ex) {/*ignore*/}
-			}
+			  ex.printStackTrace();
+		} finally {
+		   try {writer.close();} catch (Exception ex) {/*ignore*/}
+		}
 	}
 }

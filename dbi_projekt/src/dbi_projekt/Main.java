@@ -12,7 +12,7 @@ public class Main {
 		table.createTables();
 		
 		long start, ende, startwrite, endwrite;
-		int n = 1; //Anzahl d. Durchgänge
+		int n = 50; //Anzahl d. Durchgänge
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
 		
