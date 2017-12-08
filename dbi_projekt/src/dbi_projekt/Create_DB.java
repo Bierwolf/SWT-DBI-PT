@@ -1,10 +1,6 @@
 package dbi_projekt;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.sql.*;
 
 public class Create_DB 
@@ -15,16 +11,20 @@ public class Create_DB
 	static final String CON_URL_DB = "jdbc:mariadb://localhost:3306/benchmark";
 	static final String CON_REMOTE = "jdbc:mariadb://192.168.122.43:3306/";
 	static final String CON_REMOTE_DB = "jdbc:mariadb://192.168.122.43:3306/benchmark";
+	static final String FILE_NAME = "accounts.txt";
 	
-	void createDatabase()
+	void createDatabase(Boolean remote)
 	{	
 		Connection conn = null;
 		Statement stmt = null;
 		
 		try {
 			System.out.println("Creating DB..");
-			conn = DriverManager.getConnection(CON_URL, USER, PASS);
-			//conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			if (remote)
+				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL, USER, PASS);
+			
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS benchmark");
@@ -48,15 +48,17 @@ public class Create_DB
 			}
 		}
 	}
-	void deleteDatabase()
+	void deleteDatabase(Boolean remote)
 	{	
 		Connection conn = null;
 		Statement stmt = null;
 		
 		try {
 			System.out.println("Deleting DB..");
-			conn = DriverManager.getConnection(CON_URL, USER, PASS);
-			//conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			if (remote) 
+				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DROP DATABASE IF EXISTS benchmark");
@@ -79,12 +81,10 @@ public class Create_DB
 			}
 		}
 	}
-	void createTables ()
+	void createTables (Boolean remote)
 	{		
 		 Connection conn = null;
-		 Statement stmt = null;
-		 int affected;
-		 
+		 Statement stmt = null;		 
 		
 		 String table_branches = "create table IF NOT EXISTS branches" + 
 		 		"( branchid int not null," + 
@@ -125,10 +125,13 @@ public class Create_DB
 		 			"foreign key (tellerid) references tellers(tellerid)," + 
 		 			"foreign key (branchid) references branches(branchid));"
 				 ;
-		try {
+		
+		 try {
 			System.out.println("Creating tables..");
-			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			if (remote)
+				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate (table_branches);
@@ -155,7 +158,7 @@ public class Create_DB
 		}
 	}
 		
-	void deleteTables()
+	void deleteTables(Boolean remote)
 	{
 		Connection conn = null;
 		 Statement stmt = null;
@@ -167,16 +170,16 @@ public class Create_DB
 		
 		try {
 			System.out.println("Deleting tables..");
-			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			if (remote)
+				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate (drop_history);
 			stmt.executeUpdate (drop_tellers);
 			stmt.executeUpdate (drop_accounts);
 			stmt.executeUpdate (drop_branches); 
-			
-			
 			
 			conn.commit();
 			conn.close();
@@ -198,7 +201,7 @@ public class Create_DB
 		}
 	}
 	
-	void fill (int n)
+	void fill (int n, Boolean remote)
 	{	
 		
 		Connection conn = null;
@@ -210,86 +213,119 @@ public class Create_DB
 		String adress_accounts = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
 		String name_teller = "abcdefghijklmnopqrst";
 		String adress_teller = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
-		String cmmnt = "AbcdefghijklmnopqrstuvwxyzAbcd";
-		String insert = null ;
+//		String cmmnt = "AbcdefghijklmnopqrstuvwxyzAbcd";
+//		String insert = null ;
 		
-		Writer writer = null;
-				
 		int rndm = 0;
 		
+		/*
+		 *  SQL-Statements für die einzelnen Tupel werden hier per Concatenate zusammengefügt und eingesetzt 
+		 */
+
 		try
 		{
-			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			if (remote)
+				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			
-			try {
-			    writer = new BufferedWriter(new OutputStreamWriter(
-			          new FileOutputStream("branches.txt"), "utf-8"));
-			} catch (IOException ex) {
-			  ex.printStackTrace();
-			} 
-			
 			for (int i = 1; i <= n; i++)
 			{
-				//insert = "insert into branches values ("+i + ","+ "'" + branchname +  "'" + ", 0" +  "," + "'" + adress_branches + "');";
-				//stmt.executeUpdate(("insert into branches values ("+i + ","+ "'" + branchname +  "'" + ", 0" +  "," + "'" + adress_branches + "');"));	 //adress
-				writer.write(i + ","+ branchname + ",0" +  "," + adress_branches + ";");
-				//(int) Math.random();
+				stmt.executeUpdate(("insert into branches values ("+i + ","+ "'" + branchname +  "', 0, '" + adress_branches + "');"));
 			}
-			writer.flush();
 			conn.commit();
 			
-			try {
-			    writer = new BufferedWriter(new OutputStreamWriter(
-			          new FileOutputStream("accounts.txt"), "utf-8"));
-			} catch (IOException ex) {
-			  // report
-			} 
-			
+			//Accounts Insert
 			for (int i = 1; i <= n * 100000; i++)
 			{
-				rndm = (int) Math.random()+1;
+				rndm = (int) (Math.random() +1);
+				stmt.executeUpdate(("insert into accounts values ("+i + ", '" + name_account +  "', 0, " + rndm + ", '" + adress_accounts + "');"));
 				
-				//insert = ("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
-				//stmt.executeUpdate("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
-				writer.write(i + "," + name_account + ",0" +  ","	+ rndm + ","+ adress_accounts + ";");
-				//(int) Math.random();
-				if(i%500000 == 0)
-				{
-					writer.flush();
-				}
 			}
 			conn.commit();
 			
-			try {
-			    writer = new BufferedWriter(new OutputStreamWriter(
-			          new FileOutputStream("tellers.txt"), "utf-8"));
-			} catch (IOException ex) {
-			  // report
-			} 
-			
+			//Teller Insert
 			for (int i = 1; i <= n * 10; i++)
 			{
-				rndm = (int) Math.random()+1;
-				
-				//insert = ("insert into tellers values ("+i + ","+ "'" + name_teller +  "'"+ ", 0" +  ","+ rndm + ","+ "'" + adress_teller + "');");
-				//stmt.executeUpdate("insert into tellers values ("+i + ","+ "'" + name_teller +  "'"+ ", 0" +  ","+ rndm + ","+ "'" + adress_teller + "');");
-				writer.write(i + ","+  name_teller + ",0" +  ","+ rndm + ","+ adress_teller + ";");
+				rndm = (int) (Math.random() +1);
+				stmt.executeUpdate("insert into tellers values (" + i + ",'" + name_teller +  "', 0," + rndm + ",'" + adress_teller + "');");
 			}
-			writer.flush();
 			
 			conn.commit();
 			conn.close();
 		}
 		catch (SQLException se) {
 			se.printStackTrace();
-			// TODO Auto-generated catch block
-		}catch (IOException ex) {
-			  ex.printStackTrace();
-		} finally {
-		   try {writer.close();} catch (Exception ex) {/*ignore*/}
+		}
+	}
+	
+	/*
+	 * Wenn du willst, kannst du die Tables noch in einzelne Files packen. Das mit BEGIN und END soll bei MariaDB ein Puffern von je 1000 TX-Blöcken bewirken und ist deswegen eigentlich ziemlich wichtig.#
+	 * (Habs noch nicht ausprobiert.)
+	 * Die Methode gibt den absoluten Pfad der .txt zurück. Damit kann man dann ein SQL-Statement Maria-DB übergeben
+	 * Branches und Tellers vielleicht besser über die alte Methode übergeben
+	 */
+	String writeSQLFile (int n) throws IOException
+	{
+		String branchname = "ABCDEFGHIJKLMNOPQRST";
+		String adress_branches =  "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrst";
+		String name_account = "abcdefghijklmnopqrst";
+		String adress_accounts = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
+		String name_teller = "abcdefghijklmnopqrst";
+		String adress_teller = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
+		
+		int rndm = 1;
+		Writer writer = null;
+		
+		try {
+		    writer = new BufferedWriter(new OutputStreamWriter(
+		          new FileOutputStream("branches.txt"), "utf-8"));
+		    //File branches = new File("branches.txt");
+		    
+		    //Branches
+		    for (int i = 1; i <= n; i++)
+			{
+				writer.write(i + "," + branchname +  ",0," + adress_branches + ";\n");
+			}
+		    writer.flush();
+		    
+		    writer = new BufferedWriter(new OutputStreamWriter(
+			          new FileOutputStream("accounts.txt"), "utf-8"));
+			    File accounts = new File("accounts.txt");
+		    
+		    //Accounts
+			for (int i = 1; i <= n * 100000; i++)
+			{
+				
+				rndm = (int) (Math.random() +1);
+				writer.write((i +"," + name_account + ",0," + rndm + "," + adress_accounts + ";\n"));
+
+				if (i %500000 == 0)
+					writer.flush();
+			}
+			
+			writer = new BufferedWriter(new OutputStreamWriter(
+			          new FileOutputStream("tellers.txt"), "utf-8"));
+			    //File tellers = new File("tellers.txt");
+			    
+			//Tellers
+			for (int i = 1; i <= n * 10; i++)
+			{
+				rndm = (int) (Math.random() +1);
+				writer.write(i + "," + name_teller +  ",0," + rndm + "," + adress_teller + ";\n");
+						
+			}
+			writer.close();
+			return accounts.getAbsolutePath(); 
+		} 
+		catch (IOException ex) {
+			  return ""; 
+			}
+		finally
+		{
+			writer.close();
 		}
 	}
 }
