@@ -12,15 +12,19 @@ public class Create_DB
 	static final String CON_REMOTE = "jdbc:mariadb://192.168.122.43:3306/";
 	static final String CON_REMOTE_DB = "jdbc:mariadb://192.168.122.43:3306/benchmark";
 	static final String FILE_NAME = "accounts.txt";
-	void createDatabase()
+	
+	void createDatabase(Boolean remote)
 	{	
 		Connection conn = null;
 		Statement stmt = null;
 		
 		try {
 			System.out.println("Creating DB..");
-			conn = DriverManager.getConnection(CON_URL, USER, PASS);
-			//conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			if (remote)
+				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL, USER, PASS);
+			
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS benchmark");
@@ -44,15 +48,17 @@ public class Create_DB
 			}
 		}
 	}
-	void deleteDatabase()
+	void deleteDatabase(Boolean remote)
 	{	
 		Connection conn = null;
 		Statement stmt = null;
 		
 		try {
 			System.out.println("Deleting DB..");
-			conn = DriverManager.getConnection(CON_URL, USER, PASS);
-			//conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			if (remote) 
+				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate("DROP DATABASE IF EXISTS benchmark");
@@ -75,12 +81,10 @@ public class Create_DB
 			}
 		}
 	}
-	void createTables ()
+	void createTables (Boolean remote)
 	{		
 		 Connection conn = null;
-		 Statement stmt = null;
-		 int affected;
-		 
+		 Statement stmt = null;		 
 		
 		 String table_branches = "create table IF NOT EXISTS branches" + 
 		 		"( branchid int not null," + 
@@ -121,10 +125,13 @@ public class Create_DB
 		 			"foreign key (tellerid) references tellers(tellerid)," + 
 		 			"foreign key (branchid) references branches(branchid));"
 				 ;
-		try {
+		
+		 try {
 			System.out.println("Creating tables..");
-			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			if (remote)
+				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate (table_branches);
@@ -151,7 +158,7 @@ public class Create_DB
 		}
 	}
 		
-	void deleteTables()
+	void deleteTables(Boolean remote)
 	{
 		Connection conn = null;
 		 Statement stmt = null;
@@ -163,8 +170,10 @@ public class Create_DB
 		
 		try {
 			System.out.println("Deleting tables..");
-			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			if (remote)
+				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate (drop_history);
@@ -192,7 +201,7 @@ public class Create_DB
 		}
 	}
 	
-	void fill (int n)
+	void fill (int n, Boolean remote)
 	{	
 		
 		Connection conn = null;
@@ -224,8 +233,10 @@ public class Create_DB
 		 */
 		try
 		{
-			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			if (remote)
+				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			
