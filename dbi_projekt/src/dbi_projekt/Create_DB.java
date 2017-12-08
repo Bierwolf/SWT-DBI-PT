@@ -217,44 +217,61 @@ public class Create_DB
 				
 		int rndm = 0;
 		
-		try {
-		    writer = new BufferedWriter(new OutputStreamWriter(
-		          new FileOutputStream("filename.txt"), "utf-8"));
-		} catch (IOException ex) {
-		  // report
-		} 
-		
 		try
 		{
 			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
+			
+			try {
+			    writer = new BufferedWriter(new OutputStreamWriter(
+			          new FileOutputStream("branches.txt"), "utf-8"));
+			} catch (IOException ex) {
+			  // report
+			} 
+			
 			for (int i = 1; i <= n; i++)
 			{
 				//insert = "insert into branches values ("+i + ","+ "'" + branchname +  "'" + ", 0" +  "," + "'" + adress_branches + "');";
-				stmt.executeUpdate(("insert into branches values ("+i + ","+ "'" + branchname +  "'" + ", 0" +  "," + "'" + adress_branches + "');"));	 //adress
+				//stmt.executeUpdate(("insert into branches values ("+i + ","+ "'" + branchname +  "'" + ", 0" +  "," + "'" + adress_branches + "');"));	 //adress
+				writer.write(i + ","+ branchname + ",0" +  "," + adress_branches + ";");
 				//(int) Math.random();
 			}
 			conn.commit();
+			
+			try {
+			    writer = new BufferedWriter(new OutputStreamWriter(
+			          new FileOutputStream("accounts.txt"), "utf-8"));
+			} catch (IOException ex) {
+			  // report
+			} 
 			
 			for (int i = 1; i <= n * 100000; i++)
 			{
 				rndm = (int) Math.random()+1;
 				
 				//insert = ("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
-				stmt.executeUpdate("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
-				writer.write("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
+				//stmt.executeUpdate("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
+				writer.write(i + "," + name_account + ",0" +  ","	+ rndm + ","+ adress_accounts + ";");
 				//(int) Math.random();
 			}
 			conn.commit();
+			
+			try {
+			    writer = new BufferedWriter(new OutputStreamWriter(
+			          new FileOutputStream("tellers.txt"), "utf-8"));
+			} catch (IOException ex) {
+			  // report
+			} 
 			
 			for (int i = 1; i <= n * 10; i++)
 			{
 				rndm = (int) Math.random()+1;
 				
 				//insert = ("insert into tellers values ("+i + ","+ "'" + name_teller +  "'"+ ", 0" +  ","+ rndm + ","+ "'" + adress_teller + "');");
-				stmt.executeUpdate("insert into tellers values ("+i + ","+ "'" + name_teller +  "'"+ ", 0" +  ","+ rndm + ","+ "'" + adress_teller + "');");
+				//stmt.executeUpdate("insert into tellers values ("+i + ","+ "'" + name_teller +  "'"+ ", 0" +  ","+ rndm + ","+ "'" + adress_teller + "');");
+				writer.write(i + ","+  name_teller + ",0" +  ","+ rndm + ","+ adress_teller + ";");
 			}
 			
 			conn.commit();
