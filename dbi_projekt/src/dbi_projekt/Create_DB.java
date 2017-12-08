@@ -1,10 +1,6 @@
 package dbi_projekt;
 
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.sql.*;
 
 public class Create_DB 
@@ -15,7 +11,7 @@ public class Create_DB
 	static final String CON_URL_DB = "jdbc:mariadb://localhost:3306/benchmark";
 	static final String CON_REMOTE = "jdbc:mariadb://192.168.122.43:3306/";
 	static final String CON_REMOTE_DB = "jdbc:mariadb://192.168.122.43:3306/benchmark";
-	
+	static final String FILE_NAME = "accounts.txt";
 	void createDatabase()
 	{	
 		Connection conn = null;
@@ -176,8 +172,6 @@ public class Create_DB
 			stmt.executeUpdate (drop_accounts);
 			stmt.executeUpdate (drop_branches); 
 			
-			
-			
 			conn.commit();
 			conn.close();
 		}
@@ -210,51 +204,58 @@ public class Create_DB
 		String adress_accounts = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
 		String name_teller = "abcdefghijklmnopqrst";
 		String adress_teller = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
-		String cmmnt = "AbcdefghijklmnopqrstuvwxyzAbcd";
-		String insert = null ;
+//		String cmmnt = "AbcdefghijklmnopqrstuvwxyzAbcd";
+//		String insert = null ;
 		
-		Writer writer = null;
-				
 		int rndm = 0;
 		
+		/*Writer writer = null;
 		try {
 		    writer = new BufferedWriter(new OutputStreamWriter(
 		          new FileOutputStream("filename.txt"), "utf-8"));
 		} catch (IOException ex) {
 		  // report
 		} 
+		*/
 		
+		
+		/*
+		 *  SQL-Statements für die einzelnen Tupel werden hier per Concatenate zusammengefügt und eingesetzt 
+		 */
 		try
 		{
 			conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			//conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
+			
+			//Branches Insert
 			for (int i = 1; i <= n; i++)
 			{
-				//insert = "insert into branches values ("+i + ","+ "'" + branchname +  "'" + ", 0" +  "," + "'" + adress_branches + "');";
-				stmt.executeUpdate(("insert into branches values ("+i + ","+ "'" + branchname +  "'" + ", 0" +  "," + "'" + adress_branches + "');"));	 //adress
-				//(int) Math.random();
+				stmt.executeUpdate(("insert into branches values ("+i + ","+ "'" + branchname +  "', 0, '" + adress_branches + "');"));
 			}
 			conn.commit();
 			
+			//Accounts Insert
 			for (int i = 1; i <= n * 100000; i++)
 			{
-				rndm = (int) Math.random()+1;
+//				if (i %1000 == 0)
+//					stmt.executeUpdate("BEGIN;");
+				rndm = (int) (Math.random() +1);
 				
-				//insert = ("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
-				stmt.executeUpdate("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
-				writer.write("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
-				//(int) Math.random();
+				stmt.executeUpdate(("insert into accounts values ("+i + ", '" + name_account +  "', 0, "	+ rndm + ", '" + adress_accounts + "');"));
+				//writer.write("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
+
+//				if (i %1000 == 0)
+//					stmt.executeUpdate("END;");
 			}
 			conn.commit();
 			
+			//Teller Insert
 			for (int i = 1; i <= n * 10; i++)
 			{
-				rndm = (int) Math.random()+1;
-				
-				//insert = ("insert into tellers values ("+i + ","+ "'" + name_teller +  "'"+ ", 0" +  ","+ rndm + ","+ "'" + adress_teller + "');");
-				stmt.executeUpdate("insert into tellers values ("+i + ","+ "'" + name_teller +  "'"+ ", 0" +  ","+ rndm + ","+ "'" + adress_teller + "');");
+				rndm = (int) (Math.random() +1);
+				stmt.executeUpdate("insert into tellers values (" + i + ",'" + name_teller +  "', 0," + rndm + ",'" + adress_teller + "');");
 			}
 			
 			conn.commit();
@@ -263,10 +264,73 @@ public class Create_DB
 		catch (SQLException se) {
 			se.printStackTrace();
 			// TODO Auto-generated catch block
-		}catch (IOException ex) {
+		/*}catch (IOException ex) {
 			  // report
 			} finally {
-			   try {writer.close();} catch (Exception ex) {/*ignore*/}
+			 try {writer.close();} catch (Exception ex) {/*ignore*/}
+			
+		
+	}
+	
+	String writeSQLFile (int n) throws IOException
+	{
+		String branchname = "ABCDEFGHIJKLMNOPQRST";
+		String adress_branches =  "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrst";
+		String name_account = "abcdefghijklmnopqrst";
+		String adress_accounts = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
+		String name_teller = "abcdefghijklmnopqrst";
+		String adress_teller = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
+		
+		int rndm = 0;
+		Writer writer = null;
+		
+		try {
+		    writer = new BufferedWriter(new OutputStreamWriter(
+		          new FileOutputStream(FILE_NAME), "utf-8"));
+		    File file = new File (FILE_NAME); 
+		    //Branches
+		    for (int i = 0; i < n; i++)
+			{
+				writer.write(("insert into branches values ("+ (i+1) + ", '" + branchname +  "', 0, '" + adress_branches + "');\n"));
 			}
+			
+		    writer.write("\n"); //Für unsere Übersicht
+		    
+		    //Accounts
+			for (int i = 0; i < n * 100000; i++)
+			{
+				if (i %1000 == 0)
+				writer.write("BEGIN;\n");
+				
+				rndm = (int) (Math.random() +1);
+				writer.write(("insert into accounts values ("+(i+1) + ", '" + name_account + "', 0, " + rndm + ", '" + adress_accounts + "');\n"));
+
+
+				if (i %1000 == 0)
+					writer.write("END;\n");
+			}
+			
+			//Tellers
+			for (int i = 0; i < n * 10; i++)
+			{
+				if (i %1000 == 0)
+					writer.write("BEGIN;\n");
+				
+				rndm = (int) (Math.random() +1);
+				writer.write("insert into tellers values (" + (i+1) + ",'" + name_teller +  "', 0, " + rndm + ",'" + adress_teller + "');\n");
+				
+				if (i %1000 == 0)
+					writer.write("END;\n");			
+			}
+			writer.close();
+			return file.getAbsolutePath();
+		} 
+		catch (IOException ex) {
+		  writer.close();
+		}
+		
+		return ""; 
+		
+		
 	}
 }
