@@ -218,19 +218,10 @@ public class Create_DB
 		
 		int rndm = 0;
 		
-		/*Writer writer = null;
-		try {
-		    writer = new BufferedWriter(new OutputStreamWriter(
-		          new FileOutputStream("filename.txt"), "utf-8"));
-		} catch (IOException ex) {
-		  // report
-		} 
-		*/
-		
-		
 		/*
 		 *  SQL-Statements für die einzelnen Tupel werden hier per Concatenate zusammengefügt und eingesetzt 
 		 */
+
 		try
 		{
 			if (remote)
@@ -250,15 +241,9 @@ public class Create_DB
 			//Accounts Insert
 			for (int i = 1; i <= n * 100000; i++)
 			{
-//				if (i %1000 == 0)
-//					stmt.executeUpdate("BEGIN;");
 				rndm = (int) (Math.random() +1);
+				stmt.executeUpdate(("insert into accounts values ("+i + ", '" + name_account +  "', 0, " + rndm + ", '" + adress_accounts + "');"));
 				
-				stmt.executeUpdate(("insert into accounts values ("+i + ", '" + name_account +  "', 0, "	+ rndm + ", '" + adress_accounts + "');"));
-				//writer.write("insert into accounts values ("+i + "," + "'" + name_account +  "'"+ ", 0" +  ","	+ rndm + ","+ "'" + adress_accounts + "');");
-
-//				if (i %1000 == 0)
-//					stmt.executeUpdate("END;");
 			}
 			conn.commit();
 			
@@ -274,15 +259,15 @@ public class Create_DB
 		}
 		catch (SQLException se) {
 			se.printStackTrace();
-			// TODO Auto-generated catch block
-		/*}catch (IOException ex) {
-			  // report
-			} finally {
-			 try {writer.close();} catch (Exception ex) {/*ignore*/}
-			
-		
+		}
 	}
 	
+	/*
+	 * Wenn du willst, kannst du die Tables noch in einzelne Files packen. Das mit BEGIN und END soll bei MariaDB ein Puffern von je 1000 TX-Blöcken bewirken und ist deswegen eigentlich ziemlich wichtig.#
+	 * (Habs noch nicht ausprobiert.)
+	 * Die Methode gibt den absoluten Pfad der .txt zurück. Damit kann man dann ein SQL-Statement Maria-DB übergeben
+	 * Branches und Tellers vielleicht besser über die alte Methode übergeben
+	 */
 	String writeSQLFile (int n) throws IOException
 	{
 		String branchname = "ABCDEFGHIJKLMNOPQRST";
@@ -299,13 +284,14 @@ public class Create_DB
 		    writer = new BufferedWriter(new OutputStreamWriter(
 		          new FileOutputStream(FILE_NAME), "utf-8"));
 		    File file = new File (FILE_NAME); 
+		   
 		    //Branches
-		    for (int i = 0; i < n; i++)
-			{
-				writer.write(("insert into branches values ("+ (i+1) + ", '" + branchname +  "', 0, '" + adress_branches + "');\n"));
-			}
-			
-		    writer.write("\n"); //Für unsere Übersicht
+//		    for (int i = 0; i < n; i++)
+//			{
+//				writer.write(("insert into branches values ("+ (i+1) + ", '" + branchname +  "', 0, '" + adress_branches + "');\n"));
+//			}
+//			
+//		    writer.write("\n"); //Für unsere Übersicht
 		    
 		    //Accounts
 			for (int i = 0; i < n * 100000; i++)
@@ -317,7 +303,7 @@ public class Create_DB
 				writer.write(("insert into accounts values ("+(i+1) + ", '" + name_account + "', 0, " + rndm + ", '" + adress_accounts + "');\n"));
 
 
-				if (i %1000 == 0)
+				if ((i+1) %1000 == 0)
 					writer.write("END;\n");
 			}
 			
@@ -325,7 +311,7 @@ public class Create_DB
 			for (int i = 0; i < n * 10; i++)
 			{
 				if (i %1000 == 0)
-					writer.write("BEGIN;\n");
+					writer.write("BEGIN;\n"); 
 				
 				rndm = (int) (Math.random() +1);
 				writer.write("insert into tellers values (" + (i+1) + ",'" + name_teller +  "', 0, " + rndm + ",'" + adress_teller + "');\n");
@@ -334,14 +320,11 @@ public class Create_DB
 					writer.write("END;\n");			
 			}
 			writer.close();
-			return file.getAbsolutePath();
+			return file.getAbsolutePath(); 
 		} 
 		catch (IOException ex) {
-		  writer.close();
-		}
-		
-		return ""; 
-		
-		
+			  writer.close();
+			  return ""; 
+			}
 	}
 }

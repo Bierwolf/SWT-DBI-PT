@@ -1,5 +1,7 @@
 package dbi_projekt;
 
+import java.io.IOException;
+
 public class Main {
 
 	public static void main(String[] args) {
@@ -16,6 +18,18 @@ public class Main {
 		table.deleteTables(remote);
 		table.createTables(remote);
 		
+		System.out.println("Creating accounts.txt..");
+		startwrite = System.currentTimeMillis();
+		
+		try {
+			table.writeSQLFile(n);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		endwrite = System.currentTimeMillis();
+		System.out.println(("Dauer: " +(endwrite - startwrite)) + " ms");
 		
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
@@ -24,7 +38,7 @@ public class Main {
 		
 		ende = System.currentTimeMillis();
 		System.out.println ("Anzahl Durchgänge: " + n);
-		System.out.println(("Dauer: " +(ende - start)) + "ms");
+		System.out.println(("Dauer: " +(ende - start)) + " ms");
 	}
 
 }
