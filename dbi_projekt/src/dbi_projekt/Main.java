@@ -1,7 +1,5 @@
 package dbi_projekt;
 
-import java.io.*;
-
 public class Main {
 
 	public static void main(String[] args) {
@@ -19,13 +17,6 @@ public class Main {
 		start = System.currentTimeMillis();
 		
 		table.fill(n);
-<<<<<<< HEAD
-=======
-		
-		Writer writer = null;
-
-		
->>>>>>> branch 'master' of https://github.com/Bierwolf/swt-dbi-pt
 		
 		ende = System.currentTimeMillis();
 		System.out.println ("Anzahl Durchgänge: " + n);
