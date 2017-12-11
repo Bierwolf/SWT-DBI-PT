@@ -35,11 +35,13 @@ public class Main {
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
 		
+		table.execute(remote);
 		//table.fill(n, remote);
 		
 		ende = System.currentTimeMillis();
 		System.out.println ("Anzahl Durchgänge: " + n);
 		System.out.println(("Dauer: " +(ende - start)) + " ms");
+		System.out.println("Gesamtdauer: " +((ende - start) + (endwrite - startwrite)) + " ms");
 	}
 
 }

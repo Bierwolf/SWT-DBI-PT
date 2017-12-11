@@ -91,7 +91,8 @@ public class Create_DB
 		 		"branchname char(20) not null," + 
 		 		"balance int not null," + 
 		 		"address char(72) not null," + 
-		 		"primary key (branchid) );"
+		 		"primary key (branchid) )" +
+		 		" ENGINE = MEMORY;"
 		 		;
 		 
 		 String table_accounts ="create table IF NOT EXISTS accounts" + 
@@ -101,7 +102,8 @@ public class Create_DB
 		 		"branchid int not null," + 
 		 		"address char(68) not null," + 
 		 		"primary key (accid)," + 
-		 		"foreign key (branchid) references branches(branchid) );"
+		 		"foreign key (branchid) references branches(branchid) )" +
+		 		" ENGINE = MEMORY ;"
 				 ;
 		 
 		 String table_tellers = "create table IF NOT EXISTS tellers" + 
@@ -111,7 +113,8 @@ public class Create_DB
 		 		"branchid int not null," + 
 		 		"address char(68) not null," + 
 		 		"primary key (tellerid)," + 
-		 		"foreign key (branchid) references branches(branchid) );"
+		 		"foreign key (branchid) references branches(branchid) )" +
+		 		" ENGINE = MEMORY;"
 		 		;
 		 		
 		 	String table_history = "create table IF NOT EXISTS history" + 
@@ -123,7 +126,8 @@ public class Create_DB
 		 			"cmmnt char(30) not null," + 
 		 			"foreign key (accid) references accounts(accid) ," + 
 		 			"foreign key (tellerid) references tellers(tellerid)," + 
-		 			"foreign key (branchid) references branches(branchid));"
+		 			"foreign key (branchid) references branches(branchid))" +
+			 		" ENGINE = MEMORY;"
 				 ;
 		
 		 try {
@@ -171,7 +175,7 @@ public class Create_DB
 		try {
 			System.out.println("Deleting tables..");
 			if (remote)
-				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+				conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			else
 				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
@@ -201,6 +205,55 @@ public class Create_DB
 		}
 	}
 	
+	void execute(Boolean remote) 
+	{
+		Connection conn = null;
+		Statement stmt = null;
+		
+		try {
+			System.out.println("Loading Files..");
+			if (remote) 
+				conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			conn.setAutoCommit (false);
+			stmt = conn.createStatement();
+			String insertbranches = ("load data local infile 'C:/Users/Lennart/git/swt-dbi-pt/dbi_projekt/branches.txt'"
+					+ " into table branches"
+					+ " fields terminated by ','"
+					+ " lines terminated by ';';");
+			String insertaccounts = ("load data local infile 'C:/Users/Lennart/git/swt-dbi-pt/dbi_projekt/accounts.txt'"
+					+ " into table accounts"
+					+ " fields terminated by ','"
+					+ " lines terminated by ';';");
+			String inserttellers = ("load data local infile 'C:/Users/Lennart/git/swt-dbi-pt/dbi_projekt/tellers.txt'"
+					+ " into table tellers"
+					+ " fields terminated by ','"
+					+ " lines terminated by ';';");
+			stmt.executeUpdate(insertbranches);
+			conn.commit();
+			stmt.executeUpdate(insertaccounts);
+			conn.commit();
+			stmt.executeUpdate(inserttellers);
+			conn.commit();
+			conn.close();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			System.out.println("Connection failed!");
+			e.printStackTrace();
+		}
+		finally {
+			try	{
+				if (stmt != null)
+					conn.close();
+				}
+			catch (SQLException se) {
+				// TODO Auto-generated catch block
+			}
+		}
+	}
+	
 	void fill (int n, Boolean remote)
 	{	
 		
@@ -225,7 +278,7 @@ public class Create_DB
 		try
 		{
 			if (remote)
-				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+				conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			else
 				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
@@ -287,10 +340,11 @@ public class Create_DB
 		    //Branches
 		    for (int i = 1; i <= n; i++)
 			{
-				writer.write(i + "," + branchname +  ",0," + adress_branches + ";\n");
+				writer.write(i + "," + branchname +  ",0," + adress_branches + ";");
 			}
 		    writer.flush();
 		    
+		    writer.close();
 		    writer = new BufferedWriter(new OutputStreamWriter(
 			          new FileOutputStream("accounts.txt"), "utf-8"));
 			    File accounts = new File("accounts.txt");
@@ -300,12 +354,12 @@ public class Create_DB
 			{
 				
 				rndm = (int) (Math.random() +1);
-				writer.write((i +"," + name_account + ",0," + rndm + "," + adress_accounts + ";\n"));
+				writer.write((i +"," + name_account + ",0," + rndm + "," + adress_accounts + ";"));
 
 				if (i %500000 == 0)
 					writer.flush();
 			}
-			
+			writer.close();
 			writer = new BufferedWriter(new OutputStreamWriter(
 			          new FileOutputStream("tellers.txt"), "utf-8"));
 			    //File tellers = new File("tellers.txt");
@@ -314,7 +368,7 @@ public class Create_DB
 			for (int i = 1; i <= n * 10; i++)
 			{
 				rndm = (int) (Math.random() +1);
-				writer.write(i + "," + name_teller +  ",0," + rndm + "," + adress_teller + ";\n");
+				writer.write(i + "," + name_teller +  ",0," + rndm + "," + adress_teller + ";");
 						
 			}
 			writer.close();
