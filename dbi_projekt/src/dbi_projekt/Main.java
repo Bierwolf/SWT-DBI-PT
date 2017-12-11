@@ -1,6 +1,6 @@
 package dbi_projekt;
 
-import java.io.IOException;
+import java.io.*;
 
 public class Main {
 
@@ -34,7 +34,7 @@ public class Main {
 		
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
-		
+
 		table.execute(remote);
 		//table.fill(n, remote);
 		
