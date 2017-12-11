@@ -30,7 +30,7 @@ public class Main {
 		}
 		
 		endwrite = System.currentTimeMillis();
-		System.out.println(("Dauer: " +(endwrite - startwrite)) + " ms");
+		System.out.println(("Dauer Filecreate: " +(endwrite - startwrite)) + " ms");
 		
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
@@ -40,7 +40,7 @@ public class Main {
 		
 		ende = System.currentTimeMillis();
 		System.out.println ("Anzahl Durchgänge: " + n);
-		System.out.println(("Dauer: " +(ende - start)) + " ms");
+		System.out.println(("Dauer Insert: " +(ende - start)) + " ms");
 		System.out.println("Gesamtdauer: " +((ende - start) + (endwrite - startwrite)) + " ms");
 	}
 
