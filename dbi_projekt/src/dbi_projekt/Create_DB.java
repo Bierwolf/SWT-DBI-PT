@@ -293,7 +293,7 @@ public class Create_DB
 			//Accounts Insert
 			for (int i = 1; i <= n * 100000; i++)
 			{
-				rndm = (int) (Math.random() +1);
+				rndm = (int) (Math.random() * n + 1);
 				stmt.executeUpdate(("insert into accounts values ("+i + ", '" + name_account +  "', 0, " + rndm + ", '" + adress_accounts + "');"));
 				
 			}
@@ -302,7 +302,7 @@ public class Create_DB
 			//Teller Insert
 			for (int i = 1; i <= n * 10; i++)
 			{
-				rndm = (int) (Math.random() +1);
+				rndm = (int) (Math.random() * n + 1);
 				stmt.executeUpdate("insert into tellers values (" + i + ",'" + name_teller +  "', 0," + rndm + ",'" + adress_teller + "');");
 			}
 			
@@ -353,7 +353,7 @@ public class Create_DB
 			for (int i = 1; i <= n * 100000; i++)
 			{
 				
-				rndm = (int) (Math.random() +1);
+				rndm = (int) (Math.random() * n + 1);
 				writer.write((i +"," + name_account + ",0," + rndm + "," + adress_accounts + ";"));
 
 				if (i %500000 == 0)
@@ -367,7 +367,7 @@ public class Create_DB
 			//Tellers
 			for (int i = 1; i <= n * 10; i++)
 			{
-				rndm = (int) (Math.random() +1);
+				rndm = (int) (Math.random() * n +1);
 				writer.write(i + "," + name_teller +  ",0," + rndm + "," + adress_teller + ";");
 						
 			}
