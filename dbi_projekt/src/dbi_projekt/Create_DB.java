@@ -15,8 +15,8 @@ public class Create_DB
 	static final String[] filepaths = null; //Dieser ist nur für Exceptions
 	
 	/**
-	 * erstellt eine Datenbank an einer vorher gegebenen Addresse
-	 * @param remote true, falls Remote Connection benutzt werden soll
+	 * Erstellt eine Datenbank auf einem durch 'remote' spezifierten DBMS. 
+	 * @param remote 'true', falls Remote Connection benutzt werden soll
 	 */
 	void createDatabase(Boolean remote)
 	{	
@@ -33,8 +33,8 @@ public class Create_DB
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS benchmark");
-			//stmt.executeUpdate("SET @@session.unique_checks = 0;");
-			//stmt.executeUpdate("SET @@session.foreign_key_checks = 0;");
+			stmt.executeUpdate("SET @@session.unique_checks = 0;");
+			stmt.executeUpdate("SET @@session.foreign_key_checks = 0;");
 			conn.commit();
 			conn.close();
 			
@@ -54,8 +54,8 @@ public class Create_DB
 	}
 	
 	/**
-	 * löscht die vorgegebenen Tables in der vorher gegebenen Datenbank
-	 * @param remote true, falls Remote Connection benutzt werden soll
+	 * Löscht die vorher mit createDatabase() erstellte Datenbank auf dem durch 'remote' angegebenen DBMS.
+	 * @param remote 'true', falls Remote Connection benutzt werden soll
 	 */
 	void deleteDatabase(Boolean remote)
 	{	
@@ -91,8 +91,8 @@ public class Create_DB
 	}
 	
 	/**
-	 * Erstellt die vorgegebenen Tables in der vorher spezifizierten Datenbank
-	 * @param remote true, falls Remote Connection benutzt werden soll
+	 * Erstellt die vorgegebenen Tables in dem durch 'remote' angegebenen DBMS.
+	 * @param remote 'true', falls Remote Connection benutzt werden soll.
 	 */
 	void createTables (Boolean remote)
 	{		
@@ -131,16 +131,16 @@ public class Create_DB
 		 		;
 		 		
 		 	String table_history = "create table IF NOT EXISTS history" + 
-		 			"( accid int not null," + 
-		 			"tellerid int not null," + 
-		 			"delta int not null," + 
-		 			"branchid int not null," + 
-		 			"accbalance int not null," + 
-		 			"cmmnt char(30) not null," + 
-		 			"foreign key (accid) references accounts(accid) ," + 
-		 			"foreign key (tellerid) references tellers(tellerid)," + 
-		 			"foreign key (branchid) references branches(branchid))" +
-			 		" ENGINE = MEMORY;"
+		 		"( accid int not null," + 
+		 		"tellerid int not null," + 
+		 		"delta int not null," + 
+		 		"branchid int not null," + 
+		 		"accbalance int not null," + 
+		 		"cmmnt char(30) not null," + 
+		 		"foreign key (accid) references accounts(accid) ," + 
+		 		"foreign key (tellerid) references tellers(tellerid)," + 
+		 		"foreign key (branchid) references branches(branchid))" +
+			 	" ENGINE = MEMORY;"
 				 ;
 		
 		 try {
@@ -153,14 +153,14 @@ public class Create_DB
 			stmt = conn.createStatement();
 			stmt.executeUpdate (table_branches);
 			stmt.executeUpdate (table_accounts);
-			stmt.executeUpdate (table_tellers); 
+			stmt.executeUpdate (table_tellers);
 			stmt.executeUpdate (table_history);
 			conn.commit();
 			conn.close();
 			
 			
 		} catch (SQLException e) {
-			System.out.println("Connection failed! create_tables");
+			System.out.println("Connection failed! Could not create tables!");
 			e.printStackTrace();
 		}
 		finally {
@@ -175,8 +175,8 @@ public class Create_DB
 	}
 		
 	/**
-	 * Löscht alle Tables, sofern sie vorhanden sind
-	 * @param remote true, falls Remote Connection benutzt werden soll
+	 * Löscht alle Tables der Test-Datenbank, sofern sie vorhanden sind.
+	 * @param remote 'true', falls Remote Connection benutzt werden soll
 	 */
 	void deleteTables(Boolean remote)
 	{
@@ -205,7 +205,7 @@ public class Create_DB
 			conn.close();
 		}
 		catch (SQLException e) {
-			System.out.println("Connection failed! delete");
+			System.out.println("Connection failed! Could not delete tables.");
 			e.printStackTrace();
 			}
 		finally {
@@ -220,9 +220,9 @@ public class Create_DB
 	}
 	
 	/**
-	 * Übergibt die .txt-Dateien an das DBMS, wo diese intern verarbeitet werden
-	 * @param filepaths Enthält die absoluten Pfade der erstellten .txt-Dateien mit den Daten
-	 * @param remote true, falls Remote Connection benutzt werden soll
+	 * Übergibt die .txt-Dateien an das DBMS, wo diese intern verarbeitet werden.
+	 * @param filepaths Enthält die absoluten Pfade der erstellten .txt-Dateien mit den Daten.
+	 * @param remote 'true', falls Remote Connection benutzt werden soll.
 	 */
 	void execute(String[] filepaths, Boolean remote) 
 	{
@@ -230,7 +230,7 @@ public class Create_DB
 		Statement stmt = null;
 		
 		try {
-			System.out.println("Loading Files..");
+			System.out.println("Loading files into DB..");
 			if (remote) 
 				conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			else
@@ -258,7 +258,7 @@ public class Create_DB
 			conn.close();
 			
 		} catch (SQLException e) {
-			System.out.println("Connection failed!");
+			System.out.println("Connection failed! Could not insert!");
 			e.printStackTrace();
 		}
 		finally {
@@ -273,9 +273,9 @@ public class Create_DB
 	}
 	
 	/**
-	 * Veraltete Befüllfunktion. Übergibt einfache Statements an das DBMS
-	 * @param n Anzahl der Durchgänge(10, 20, 50)
-	 * @param remote true, falls Remote Connection benutzt werden soll
+	 * Veraltete Befüllfunktion. Übergibt einfache Statements an das DBMS.
+	 * @param n Anzahl der Durchgänge(kann vom Nutzer beliebig gesteuert werden).
+	 * @param remote 'true', falls Remote Connection benutzt werden soll.
 	 */
 	void fill (int n, Boolean remote)
 	{	
@@ -293,11 +293,9 @@ public class Create_DB
 //		String insert = null ;
 		
 		int rndm = 0;
-		
 		/*
 		 *  SQL-Statements für die einzelnen Tupel werden hier per Concatenate zusammengefügt und eingesetzt 
 		 */
-
 		try
 		{
 			if (remote)
@@ -307,6 +305,7 @@ public class Create_DB
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			
+			//Branches Insert
 			for (int i = 1; i <= n; i++)
 			{
 				stmt.executeUpdate(("insert into branches values ("+i + ","+ "'" + branchname +  "', 0, '" + adress_branches + "');"));
@@ -318,7 +317,6 @@ public class Create_DB
 			{
 				rndm = (int) (Math.random() * n + 1);
 				stmt.executeUpdate(("insert into accounts values ("+i + ", '" + name_account +  "', 0, " + rndm + ", '" + adress_accounts + "');"));
-				
 			}
 			conn.commit();
 			
@@ -328,7 +326,6 @@ public class Create_DB
 				rndm = (int) (Math.random() * n + 1);
 				stmt.executeUpdate("insert into tellers values (" + i + ",'" + name_teller +  "', 0," + rndm + ",'" + adress_teller + "');");
 			}
-			
 			conn.commit();
 			conn.close();
 		}
@@ -337,9 +334,10 @@ public class Create_DB
 		}
 	}
 	
-	/*
-	 * Die Methode gibt den absoluten Pfad der .txt's zurück. Damit kann man dann ein SQL-Statement Maria-DB übergeben
-	 * Branches und Tellers vielleicht besser über die alte Methode übergeben
+	/**
+	 * Methode erstellt .txt-Dateien mit Insert-Statements für branches, accounts und tellers. Diese wird dann in execute() für den Insert benutzt.
+	 * @param n Anzahl der Durchgänge (kann vom Nutzer beliebig gesteuert werden).
+	 * @return  Gibt ein String-Array mit den absoluten Pfaden der angelegten Dateien zurück ([0]: branches.txt, [1]: accounts.txt, [2]: tellers.txt).
 	 */
 	String[] writeSQLFile (int n) throws IOException
 	{
@@ -354,26 +352,25 @@ public class Create_DB
 		Writer writer = null;
 		
 		try {
-		    writer = new BufferedWriter(new OutputStreamWriter(
+			//Branches
+			writer = new BufferedWriter(new OutputStreamWriter(
 		          new FileOutputStream("branches.txt"), "utf-8"));
-		    File branches = new File("branches.txt");
+		    File branches = new File("branches.txt");	//Mit diesem File kann am Ende der abs. Dateipfad einfach abgerufen werden
 		    
-		    //Branches
 		    for (int i = 1; i <= n; i++)
 			{
 				writer.write(i + "," + branchname +  ",0," + adress_branches + ";");
 			}
 		    writer.flush();
-		    
 		    writer.close();
+		    
+		  //Accounts
 		    writer = new BufferedWriter(new OutputStreamWriter(
 			          new FileOutputStream("accounts.txt"), "utf-8"));
 			    File accounts = new File("accounts.txt");
 		    
-		    //Accounts
-			for (int i = 1; i <= n * 100000; i++)
+		    for (int i = 1; i <= n * 100000; i++)
 			{
-				
 				rndm = (int) (Math.random() * n + 1);
 				writer.write((i +"," + name_account + ",0," + rndm + "," + adress_accounts + ";"));
 
@@ -381,11 +378,12 @@ public class Create_DB
 					writer.flush();
 			}
 			writer.close();
+			
+			//Tellers
 			writer = new BufferedWriter(new OutputStreamWriter(
 			          new FileOutputStream("tellers.txt"), "utf-8"));
 			    File tellers = new File("tellers.txt");
-			    
-			//Tellers
+			
 			for (int i = 1; i <= n * 10; i++)
 			{
 				rndm = (int) (Math.random() * n +1);
@@ -394,7 +392,7 @@ public class Create_DB
 			}
 			writer.close();
 			
-			//Muss leider so, funktioniert aber
+			//Muss leider so, funktioniert aber (auch wenn es Zeit kostet)
 			String[] filepaths = new String[3];
 			filepaths[0] = branches.getAbsolutePath().replace("\\", "/");
 			filepaths[1] = accounts.getAbsolutePath().replace("\\", "/");
@@ -410,33 +408,40 @@ public class Create_DB
 		}
 		return filepaths;
 	}
-	
-	void deletefiles(String[] filepath)
+	/**
+	 * Löscht die mit writeSQLFile() angelegten .txt-Dateien wieder (accounts.txt nimmt sonst bei n=50 ein knappes halbes GB auf der Platte ein!). Wird nach dem Benchmarking durchgeführt.
+	 * @param filepath Array mit den absoluten Pfaden der angelegten Dateien ([0]: branches.txt, [1]: accounts.txt, [2]: tellers.txt).
+	 */
+	void deleteFiles(String[] filepaths)
 	{
-		for(String s : filepath)
+		System.out.println();
+		for(String s : filepaths)
 		{
 			File file = new File(s);
 	         
 	        if(file.delete())
 	        {
-	            System.out.println("File deleted successfully");
+	            System.out.println(s +" deleted successfully");
 	        }
 	        else
 	        {
-	            System.out.println("Failed to delete the file");
+	            System.out.println("Failed to delete " +s);
 	        }
 		}
 	}
-	
+	/**
+	 * Wird diese Funktion aufgerufen, so werden alle vorhandenen Test-Tables der Benchmark-Datenbank auf die InnoDB-Engine umgestellt.
+	 * @param remote 'true', falls Remote Connection benutzt werden soll.
+	 */
 	void updateEngine(Boolean remote)
 	{
 		Connection conn = null;
 		Statement stmt = null;		 
 		/* Strings müssen vorher erstellt werden, da Concat in executeUpdate() nicht erlaubt ist. Java Magic, fuck that */
-		String update_branches = "alter table branches ENGINE = INNODB;" ;
-		String update_accounts = "alter table accounts ENGINE = INNODB;" ;
-		String update_tellers = "alter table tellers ENGINE = INNODB;" ;
-		String update_history = "alter table history ENGINE = INNODB;" ;
+		String update_branches = "alter table IF EXISTS branches ENGINE = INNODB;" ;
+		String update_accounts = "alter table IF EXISTS accounts ENGINE = INNODB;" ;
+		String update_tellers = "alter table IF EXISTS tellers ENGINE = INNODB;" ;
+		String update_history = "alter table IF EXISTS history ENGINE = INNODB;" ;
 			
 		try {
 			System.out.println("Updating table engine..");
@@ -447,15 +452,18 @@ public class Create_DB
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate (update_branches);
+			conn.commit();
 			stmt.executeUpdate (update_accounts);
+			conn.commit();
 			stmt.executeUpdate (update_tellers); 
+			conn.commit();
 			stmt.executeUpdate (update_history);
 			conn.commit();
 			conn.close();
 				
 				
 		} catch (SQLException e) {
-				System.out.println("Connection failed! create_tables");
+				System.out.println("Connection failed! (updateEngine() )");
 				e.printStackTrace();
 			}
 			finally {

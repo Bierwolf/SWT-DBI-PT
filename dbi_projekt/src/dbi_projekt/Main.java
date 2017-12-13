@@ -1,26 +1,34 @@
 package dbi_projekt;
 
 import java.io.*;
+import java.util.*;
 
 public class Main {
 
 	public static void main(String[] args) {
 		
-		long start, ende, startwrite, endwrite;
-		int n = 20; //Anzahl d. Durchgänge
+		long start, ende, startwrite, endwrite; //Für die Zeitmessung
+		int n; //Anzahl d. Durchgänge
 
-		Boolean remote = false; //true falls remote DB-Connection
+		Boolean remote = false; //'true', falls Remote DB-Connection geöffnet werden soll (wird manuell geändert)
 		String [] filepaths = null;
 		Create_DB table = new Create_DB();
 		
 		table.deleteDatabase(remote);
 		table.createDatabase(remote);
-		table.deleteTables(remote);
+//		table.deleteTables(remote);		//Ist unnötig, steht nur zur Vollständigkeit
 		table.createTables(remote);
 		
-		System.out.println("Creating accounts.txt..");
+		/* Geht schneller im Vergleich zu statischem n */
+		Scanner scanner = new Scanner (System.in);
+		System.out.printf ("Anzahl Durchgänge? ");
+		n = scanner.nextInt();
+		scanner.close();
+		
+		System.out.println("Creating files..");
 		startwrite = System.currentTimeMillis();
 		
+		/* Erstellen der Files */
 		try {
 			filepaths = table.writeSQLFile(n);
 		} catch (IOException e) {
@@ -28,25 +36,31 @@ public class Main {
 		}
 		
 		endwrite = System.currentTimeMillis();
-		System.out.println(("Dauer Filecreate: " +(endwrite - startwrite)) + " ms");
 		
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
-		/*System.out.println(filepaths[0]);
-		System.exit(0);*/
-
+//		System.out.println(filepaths[0]);
+//		System.exit(0);
+		
+		/* Files werden an das DBMS übergeben und dort ausgelesen und inserted */
 		table.execute(filepaths, remote);
-		//table.fill(n, remote);
+//		table.fill(n, remote);
 		
 		ende = System.currentTimeMillis();
-		System.out.println ("Anzahl Durchgänge: " + n);
+		
+		System.out.println ("\nAnzahl Durchgänge: " + n);
+		System.out.println(("Dauer FileCreate: " +(endwrite - startwrite)) + " ms");
 		System.out.println(("Dauer Insert: " +(ende - start)) + " ms");
 		System.out.println("Gesamtdauer: " +((ende - start) + (endwrite - startwrite)) + " ms");
-		/*start = System.currentTimeMillis();
-		table.updateEngine(remote);
-		ende = System.currentTimeMillis();
-		System.out.println(("Dauer Update: " +(ende - start)) + " ms");*/
-		table.deletefiles(filepaths);
+		
+		/* Der nachfolgende Block ist für den Fall, dass man die Datenbank später auf InnoDB-Basis laufen lassen will */
+//		start = System.currentTimeMillis();
+//		table.updateEngine(remote);
+//		ende = System.currentTimeMillis();
+//		System.out.println(("Dauer Update: " +(ende - start)) + " ms");
+		
+		/* Abschließend werden die erzeugten Dateien gelöscht, dies bringt bei wiederholten Durchgängen einen Vorteil von ~1.2 s. */
+		table.deleteFiles(filepaths);
 	}
 
 }
