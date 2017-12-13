@@ -5,10 +5,9 @@ import java.io.*;
 public class Main {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		
 		long start, ende, startwrite, endwrite;
-		int n = 50; //Anzahl d. Durchgänge
+		int n = 20; //Anzahl d. Durchgänge
 
 		Boolean remote = false; //true falls remote DB-Connection
 		String [] filepaths = null;
@@ -25,7 +24,6 @@ public class Main {
 		try {
 			filepaths = table.writeSQLFile(n);
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -44,10 +42,10 @@ public class Main {
 		System.out.println ("Anzahl Durchgänge: " + n);
 		System.out.println(("Dauer Insert: " +(ende - start)) + " ms");
 		System.out.println("Gesamtdauer: " +((ende - start) + (endwrite - startwrite)) + " ms");
-		start = System.currentTimeMillis();
+		/*start = System.currentTimeMillis();
 		table.updateEngine(remote);
 		ende = System.currentTimeMillis();
-		System.out.println(("Dauer Update: " +(ende - start)) + " ms");
+		System.out.println(("Dauer Update: " +(ende - start)) + " ms");*/
 		table.deletefiles(filepaths);
 	}
 

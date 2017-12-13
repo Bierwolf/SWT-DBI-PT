@@ -14,6 +14,10 @@ public class Create_DB
 	static final String FILE_NAME = "accounts.txt";
 	static final String[] filepaths = null; //Dieser ist nur für Exceptions
 	
+	/**
+	 * erstellt eine Datenbank an einer vorher gegebenen Addresse
+	 * @param remote true, falls Remote Connection benutzt werden soll
+	 */
 	void createDatabase(Boolean remote)
 	{	
 		Connection conn = null;
@@ -35,7 +39,6 @@ public class Create_DB
 			conn.close();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Connection failed!");
 			e.printStackTrace();
 		}
@@ -45,12 +48,15 @@ public class Create_DB
 					conn.close();
 				}
 			catch (SQLException se) {
-				// TODO Auto-generated catch block
+				se.printStackTrace();
 			}
 		}
 	}
 	
-	
+	/**
+	 * löscht die vorgegebenen Tables in der vorher gegebenen Datenbank
+	 * @param remote true, falls Remote Connection benutzt werden soll
+	 */
 	void deleteDatabase(Boolean remote)
 	{	
 		Connection conn = null;
@@ -70,7 +76,6 @@ public class Create_DB
 			conn.close();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Connection failed!");
 			e.printStackTrace();
 		}
@@ -80,12 +85,15 @@ public class Create_DB
 					conn.close();
 				}
 			catch (SQLException se) {
-				// TODO Auto-generated catch block
+				se.printStackTrace();
 			}
 		}
 	}
 	
-	
+	/**
+	 * Erstellt die vorgegebenen Tables in der vorher spezifizierten Datenbank
+	 * @param remote true, falls Remote Connection benutzt werden soll
+	 */
 	void createTables (Boolean remote)
 	{		
 		 Connection conn = null;
@@ -152,7 +160,6 @@ public class Create_DB
 			
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Connection failed! create_tables");
 			e.printStackTrace();
 		}
@@ -162,12 +169,15 @@ public class Create_DB
 					conn.close();
 		}
 			catch (SQLException se) {
-				// TODO Auto-generated catch block
+				se.printStackTrace();
 			}
 		}
 	}
 		
-	
+	/**
+	 * Löscht alle Tables, sofern sie vorhanden sind
+	 * @param remote true, falls Remote Connection benutzt werden soll
+	 */
 	void deleteTables(Boolean remote)
 	{
 		Connection conn = null;
@@ -195,7 +205,6 @@ public class Create_DB
 			conn.close();
 		}
 		catch (SQLException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Connection failed! delete");
 			e.printStackTrace();
 			}
@@ -206,12 +215,15 @@ public class Create_DB
 		}
 			catch (SQLException se) {
 				se.printStackTrace();
-				// TODO Auto-generated catch block
 			}
 		}
 	}
 	
-	
+	/**
+	 * Übergibt die .txt-Dateien an das DBMS, wo diese intern verarbeitet werden
+	 * @param filepaths Enthält die absoluten Pfade der erstellten .txt-Dateien mit den Daten
+	 * @param remote true, falls Remote Connection benutzt werden soll
+	 */
 	void execute(String[] filepaths, Boolean remote) 
 	{
 		Connection conn = null;
@@ -246,7 +258,6 @@ public class Create_DB
 			conn.close();
 			
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			System.out.println("Connection failed!");
 			e.printStackTrace();
 		}
@@ -256,11 +267,16 @@ public class Create_DB
 					conn.close();
 				}
 			catch (SQLException se) {
-				// TODO Auto-generated catch block
+				se.printStackTrace();
 			}
 		}
 	}
 	
+	/**
+	 * Veraltete Befüllfunktion. Übergibt einfache Statements an das DBMS
+	 * @param n Anzahl der Durchgänge(10, 20, 50)
+	 * @param remote true, falls Remote Connection benutzt werden soll
+	 */
 	void fill (int n, Boolean remote)
 	{	
 		
@@ -322,9 +338,7 @@ public class Create_DB
 	}
 	
 	/*
-	 * Wenn du willst, kannst du die Tables noch in einzelne Files packen. Das mit BEGIN und END soll bei MariaDB ein Puffern von je 1000 TX-Blöcken bewirken und ist deswegen eigentlich ziemlich wichtig.#
-	 * (Habs noch nicht ausprobiert.)
-	 * Die Methode gibt den absoluten Pfad der .txt zurück. Damit kann man dann ein SQL-Statement Maria-DB übergeben
+	 * Die Methode gibt den absoluten Pfad der .txt's zurück. Damit kann man dann ein SQL-Statement Maria-DB übergeben
 	 * Branches und Tellers vielleicht besser über die alte Methode übergeben
 	 */
 	String[] writeSQLFile (int n) throws IOException
@@ -441,7 +455,6 @@ public class Create_DB
 				
 				
 		} catch (SQLException e) {
-				// TODO Auto-generated catch block
 				System.out.println("Connection failed! create_tables");
 				e.printStackTrace();
 			}
@@ -451,7 +464,7 @@ public class Create_DB
 						conn.close();
 			}
 				catch (SQLException se) {
-					// TODO Auto-generated catch block
+					se.printStackTrace();
 				}
 		}
 	}
