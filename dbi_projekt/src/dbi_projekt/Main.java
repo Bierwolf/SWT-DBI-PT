@@ -34,6 +34,8 @@ public class Main {
 		
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
+		/*System.out.println(filepaths[0]);
+		System.exit(0);*/
 
 		table.execute(filepaths, remote);
 		//table.fill(n, remote);
@@ -42,6 +44,7 @@ public class Main {
 		System.out.println ("Anzahl Durchgänge: " + n);
 		System.out.println(("Dauer Insert: " +(ende - start)) + " ms");
 		System.out.println("Gesamtdauer: " +((ende - start) + (endwrite - startwrite)) + " ms");
+		table.deletefiles(filepaths);
 	}
 
 }

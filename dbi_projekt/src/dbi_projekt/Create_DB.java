@@ -396,4 +396,21 @@ public class Create_DB
 		}
 		return filepaths;
 	}
+	
+	void deletefiles(String[] filepath)
+	{
+		for(String s : filepath)
+		{
+			File file = new File(s);
+	         
+	        if(file.delete())
+	        {
+	            System.out.println("File deleted successfully");
+	        }
+	        else
+	        {
+	            System.out.println("Failed to delete the file");
+	        }
+		}
+	}
 }
