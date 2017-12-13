@@ -12,6 +12,7 @@ public class Create_DB
 	static final String CON_REMOTE = "jdbc:mariadb://192.168.122.43:3306/";
 	static final String CON_REMOTE_DB = "jdbc:mariadb://192.168.122.43:3306/benchmark";
 	static final String FILE_NAME = "accounts.txt";
+	static final String[] filepaths = null; //Dieser ist nur für Exceptions
 	
 	void createDatabase(Boolean remote)
 	{	
@@ -28,8 +29,8 @@ public class Create_DB
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS benchmark");
-			stmt.executeUpdate("SET @@session.unique_checks = 0;");
-			stmt.executeUpdate("SET @@session.foreign_key_checks = 0;");
+			//stmt.executeUpdate("SET @@session.unique_checks = 0;");
+			//stmt.executeUpdate("SET @@session.foreign_key_checks = 0;");
 			conn.commit();
 			conn.close();
 			
@@ -48,6 +49,8 @@ public class Create_DB
 			}
 		}
 	}
+	
+	
 	void deleteDatabase(Boolean remote)
 	{	
 		Connection conn = null;
@@ -81,11 +84,13 @@ public class Create_DB
 			}
 		}
 	}
+	
+	
 	void createTables (Boolean remote)
 	{		
 		 Connection conn = null;
 		 Statement stmt = null;		 
-		
+		 /* Strings müssen vorher erstellt werden, da Concat in executeUpdate() nicht erlaubt ist. Java Magic, fuck that */
 		 String table_branches = "create table IF NOT EXISTS branches" + 
 		 		"( branchid int not null," + 
 		 		"branchname char(20) not null," + 
@@ -133,7 +138,7 @@ public class Create_DB
 		 try {
 			System.out.println("Creating tables..");
 			if (remote)
-				conn = DriverManager.getConnection(CON_REMOTE, USER, PASS);
+				conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
 			else
 				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
@@ -162,6 +167,7 @@ public class Create_DB
 		}
 	}
 		
+	
 	void deleteTables(Boolean remote)
 	{
 		Connection conn = null;
@@ -205,7 +211,8 @@ public class Create_DB
 		}
 	}
 	
-	void execute(Boolean remote) 
+	
+	void execute(String[] filepaths, Boolean remote) 
 	{
 		Connection conn = null;
 		Statement stmt = null;
@@ -218,15 +225,15 @@ public class Create_DB
 				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
-			String insertbranches = ("load data local infile 'C:/Users/Lennart/git/swt-dbi-pt/dbi_projekt/branches.txt'"
+			String insertbranches = ("load data local infile '" + filepaths[0]  +"'"
 					+ " into table branches"
 					+ " fields terminated by ','"
 					+ " lines terminated by ';';");
-			String insertaccounts = ("load data local infile 'C:/Users/Lennart/git/swt-dbi-pt/dbi_projekt/accounts.txt'"
+			String insertaccounts = ("load data local infile '"+ filepaths[1] +"'"
 					+ " into table accounts"
 					+ " fields terminated by ','"
 					+ " lines terminated by ';';");
-			String inserttellers = ("load data local infile 'C:/Users/Lennart/git/swt-dbi-pt/dbi_projekt/tellers.txt'"
+			String inserttellers = ("load data local infile '"+ filepaths[2] +"'"
 					+ " into table tellers"
 					+ " fields terminated by ','"
 					+ " lines terminated by ';';");
@@ -320,7 +327,7 @@ public class Create_DB
 	 * Die Methode gibt den absoluten Pfad der .txt zurück. Damit kann man dann ein SQL-Statement Maria-DB übergeben
 	 * Branches und Tellers vielleicht besser über die alte Methode übergeben
 	 */
-	String writeSQLFile (int n) throws IOException
+	String[] writeSQLFile (int n) throws IOException
 	{
 		String branchname = "ABCDEFGHIJKLMNOPQRST";
 		String adress_branches =  "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrst";
@@ -335,7 +342,7 @@ public class Create_DB
 		try {
 		    writer = new BufferedWriter(new OutputStreamWriter(
 		          new FileOutputStream("branches.txt"), "utf-8"));
-		    //File branches = new File("branches.txt");
+		    File branches = new File("branches.txt");
 		    
 		    //Branches
 		    for (int i = 1; i <= n; i++)
@@ -362,7 +369,7 @@ public class Create_DB
 			writer.close();
 			writer = new BufferedWriter(new OutputStreamWriter(
 			          new FileOutputStream("tellers.txt"), "utf-8"));
-			    //File tellers = new File("tellers.txt");
+			    File tellers = new File("tellers.txt");
 			    
 			//Tellers
 			for (int i = 1; i <= n * 10; i++)
@@ -372,14 +379,21 @@ public class Create_DB
 						
 			}
 			writer.close();
-			return accounts.getAbsolutePath(); 
+			
+			//Muss leider so, funktioniert aber
+			String[] filepaths = new String[3];
+			filepaths[0] = branches.getAbsolutePath().replace("\\", "/");
+			filepaths[1] = accounts.getAbsolutePath().replace("\\", "/");
+			filepaths[2] = tellers.getAbsolutePath().replace("\\", "/"); 
+			return filepaths;
 		} 
 		catch (IOException ex) {
-			  return ""; 
+			  System.out.println("File creation failed!");
 			}
 		finally
 		{
 			writer.close();
 		}
+		return filepaths;
 	}
 }

@@ -11,7 +11,7 @@ public class Main {
 		int n = 50; //Anzahl d. Durchgänge
 
 		Boolean remote = false; //true falls remote DB-Connection
-		
+		String [] filepaths = null;
 		Create_DB table = new Create_DB();
 		
 		table.deleteDatabase(remote);
@@ -23,7 +23,7 @@ public class Main {
 		startwrite = System.currentTimeMillis();
 		
 		try {
-			table.writeSQLFile(n);
+			filepaths = table.writeSQLFile(n);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,7 +35,7 @@ public class Main {
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
 
-		table.execute(remote);
+		table.execute(filepaths, remote);
 		//table.fill(n, remote);
 		
 		ende = System.currentTimeMillis();
