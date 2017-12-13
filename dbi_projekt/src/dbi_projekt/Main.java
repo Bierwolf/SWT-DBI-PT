@@ -44,6 +44,10 @@ public class Main {
 		System.out.println ("Anzahl Durchgänge: " + n);
 		System.out.println(("Dauer Insert: " +(ende - start)) + " ms");
 		System.out.println("Gesamtdauer: " +((ende - start) + (endwrite - startwrite)) + " ms");
+		start = System.currentTimeMillis();
+		table.updateEngine(remote);
+		ende = System.currentTimeMillis();
+		System.out.println(("Dauer Update: " +(ende - start)) + " ms");
 		table.deletefiles(filepaths);
 	}
 
