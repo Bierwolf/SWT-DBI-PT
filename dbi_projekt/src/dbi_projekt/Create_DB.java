@@ -438,10 +438,10 @@ public class Create_DB
 		Connection conn = null;
 		Statement stmt = null;		 
 		/* Strings müssen vorher erstellt werden, da Concat in executeUpdate() nicht erlaubt ist. Java Magic, fuck that */
-		String update_branches = "alter table IF EXISTS branches ENGINE = INNODB;" ;
-		String update_accounts = "alter table IF EXISTS accounts ENGINE = INNODB;" ;
-		String update_tellers = "alter table IF EXISTS tellers ENGINE = INNODB;" ;
-		String update_history = "alter table IF EXISTS history ENGINE = INNODB;" ;
+		String update_branches = "alter table branches ENGINE = INNODB;" ;
+		String update_accounts = "alter table accounts ENGINE = INNODB;" ;
+		String update_tellers = "alter table tellers ENGINE = INNODB;" ;
+		String update_history = "alter table history ENGINE = INNODB;" ;
 			
 		try {
 			System.out.println("Updating table engine..");
