@@ -396,4 +396,47 @@ public class Create_DB
 		}
 		return filepaths;
 	}
+	
+	void updateEngine(Boolean remote)
+	{
+		Connection conn = null;
+		Statement stmt = null;		 
+		/* Strings müssen vorher erstellt werden, da Concat in executeUpdate() nicht erlaubt ist. Java Magic, fuck that */
+		String update_branches = "alter table branches ENGINE = INNODB;" ;
+		String update_accounts = "alter table accounts ENGINE = INNODB;" ;
+		String update_tellers = "alter table tellers ENGINE = INNODB;" ;
+		String update_history = "alter table history ENGINE = INNODB;" ;
+			
+		try {
+			System.out.println("Updating table engine..");
+			if (remote)
+				conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			conn.setAutoCommit (false);
+			stmt = conn.createStatement();
+			stmt.executeUpdate (update_branches);
+			stmt.executeUpdate (update_accounts);
+			stmt.executeUpdate (update_tellers); 
+			stmt.executeUpdate (update_history);
+			conn.commit();
+			conn.close();
+				
+				
+		} catch (SQLException e) {
+				// TODO Auto-generated catch block
+				System.out.println("Connection failed! create_tables");
+				e.printStackTrace();
+			}
+			finally {
+				try	{
+					if (stmt != null)
+						conn.close();
+			}
+				catch (SQLException se) {
+					// TODO Auto-generated catch block
+				}
+		}
+	}
 }
+
