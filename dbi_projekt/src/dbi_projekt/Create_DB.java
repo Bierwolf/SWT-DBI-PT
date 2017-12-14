@@ -476,6 +476,11 @@ public class Create_DB
 		}
 	}
 	
+	/**
+	 * Erstellt ein Array von Zufallszahlen basierend auf n. Optimiert die Erstellung des Files in writeSql()
+	 * @param n
+	 * @return Array von Zufallszahlen, n * 100000 Werte zwischen und einschlieﬂlich 1 und n
+	 */
 	int[] createRandoms(int n)
 	{
 		int[] rndm = new int[(n*100000)];
