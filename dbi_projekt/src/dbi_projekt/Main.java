@@ -15,7 +15,6 @@ public class Main {
 		
 		table.deleteDatabase(remote);
 		table.createDatabase(remote);
-//		table.deleteTables(remote);		//Ist unnötig, steht nur zur Vollständigkeit
 		table.createTables(remote);
 		
 		/* Geht schneller im Vergleich zu statischem n */
@@ -23,6 +22,8 @@ public class Main {
 		System.out.printf ("Anzahl Durchgänge? ");
 		n = scanner.nextInt();
 		scanner.close();
+		
+		/* Die Zufallszahlen werden erstellt. Sie später in writeSQLFile() einfach nur aus dem Array ausgelesen. */
 		int[] randomarray = table.createRandoms(n);
 		System.out.println("Creating files..");
 		startwrite = System.currentTimeMillis();
@@ -38,12 +39,9 @@ public class Main {
 		
 		System.out.println ("Starting to measure time..");
 		start = System.currentTimeMillis();
-//		System.out.println(filepaths[0]);
-//		System.exit(0);
 		
 		/* Files werden an das DBMS übergeben und dort ausgelesen und inserted */
 		table.execute(filepaths, remote);
-//		table.fill(n, remote);
 		
 		ende = System.currentTimeMillis();
 		
@@ -52,13 +50,15 @@ public class Main {
 		System.out.println(("Dauer Insert: " +(ende - start)) + " ms");
 		System.out.println("Gesamtdauer: " +((ende - start) + (endwrite - startwrite)) + " ms");
 		
-		/* Der nachfolgende Block ist für den Fall, dass man die Datenbank später auf InnoDB-Basis laufen lassen will */
+		/* Der nachfolgende Block ist für den Fall, dass man die Datenbank später auf InnoDB-Basis laufen lassen will. */
 //		start = System.currentTimeMillis();
 //		table.updateEngine(remote);
 //		ende = System.currentTimeMillis();
 //		System.out.println(("Dauer Update: " +(ende - start)) + " ms");
 		
-		/* Abschließend werden die erzeugten Dateien gelöscht, dies bringt bei wiederholten Durchgängen einen Vorteil von ~1.2 s. */
+		/* Abschließend werden die erzeugten Dateien gelöscht, dies bringt bei wiederholten Durchgängen einen Vorteil von ~1.2 s beim Erstellen der Files
+		 * und müllt die Platte nicht zu.
+		 * */
 		table.deleteFiles(filepaths);
 	}
 
