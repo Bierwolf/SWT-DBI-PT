@@ -339,7 +339,7 @@ public class Create_DB
 	 * @param n Anzahl der Durchgänge (kann vom Nutzer beliebig gesteuert werden).
 	 * @return  Gibt ein String-Array mit den absoluten Pfaden der angelegten Dateien zurück ([0]: branches.txt, [1]: accounts.txt, [2]: tellers.txt).
 	 */
-	String[] writeSQLFile (int n) throws IOException
+	String[] writeSQLFile (int n, int[] randomarray) throws IOException
 	{
 		String branchname = "ABCDEFGHIJKLMNOPQRST";
 		String adress_branches =  "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrst";
@@ -348,8 +348,8 @@ public class Create_DB
 		String name_teller = "abcdefghijklmnopqrst";
 		String adress_teller = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
 		
-		int rndm = 1;
 		Writer writer = null;
+		int random = 0;
 		
 		try {
 			//Branches
@@ -371,8 +371,7 @@ public class Create_DB
 		    
 		    for (int i = 1; i <= n * 100000; i++)
 			{
-				rndm = (int) (Math.random() * n + 1);
-				writer.write((i +"," + name_account + ",0," + rndm + "," + adress_accounts + ";"));
+				writer.write((i +"," + name_account + ",0," + randomarray[i-1] + "," + adress_accounts + ";"));
 
 				if (i %500000 == 0)
 					writer.flush();
@@ -386,8 +385,8 @@ public class Create_DB
 			
 			for (int i = 1; i <= n * 10; i++)
 			{
-				rndm = (int) (Math.random() * n +1);
-				writer.write(i + "," + name_teller +  ",0," + rndm + "," + adress_teller + ";");
+				random = (int) (Math.random() * n +1);
+				writer.write(i + "," + name_teller +  ",0," + random + "," + adress_teller + ";");
 						
 			}
 			writer.close();
@@ -475,6 +474,17 @@ public class Create_DB
 					se.printStackTrace();
 				}
 		}
+	}
+	
+	int[] createRandoms(int n)
+	{
+		int[] rndm = new int[(n*100000)];
+		for (int i = 0; i < n * 100000; i++)
+		{
+			rndm[i] = (int) (Math.random() * n + 1);
+			
+		}
+		return rndm;
 	}
 }
 

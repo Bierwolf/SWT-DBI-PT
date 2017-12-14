@@ -9,7 +9,6 @@ public class Main {
 		
 		long start, ende, startwrite, endwrite; //Für die Zeitmessung
 		int n; //Anzahl d. Durchgänge
-
 		Boolean remote = false; //'true', falls Remote DB-Connection geöffnet werden soll (wird manuell geändert)
 		String [] filepaths = null;
 		Create_DB table = new Create_DB();
@@ -24,13 +23,13 @@ public class Main {
 		System.out.printf ("Anzahl Durchgänge? ");
 		n = scanner.nextInt();
 		scanner.close();
-		
+		int[] randomarray = table.createRandoms(n);
 		System.out.println("Creating files..");
 		startwrite = System.currentTimeMillis();
 		
 		/* Erstellen der Files */
 		try {
-			filepaths = table.writeSQLFile(n);
+			filepaths = table.writeSQLFile(n, randomarray);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
