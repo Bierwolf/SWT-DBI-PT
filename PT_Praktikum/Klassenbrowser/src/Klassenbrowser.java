@@ -1,5 +1,3 @@
-package Aufgaben;
-
 import java.lang.reflect.*;
 
 public class Klassenbrowser 
