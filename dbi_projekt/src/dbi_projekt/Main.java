@@ -23,6 +23,8 @@ public class Main {
 		System.out.printf ("Anzahl Durchgänge? ");
 		n = scanner.nextInt();
 		scanner.close();
+		
+		System.out.println ("Starting to measure time..");
 		int[] randomarray = table.createRandoms(n);
 		System.out.println("Creating files..");
 		startwrite = System.currentTimeMillis();
@@ -32,11 +34,10 @@ public class Main {
 			filepaths = table.writeSQLFile(n, randomarray);
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-		
+		 }
+	
 		endwrite = System.currentTimeMillis();
-		
-		System.out.println ("Starting to measure time..");
+
 		start = System.currentTimeMillis();
 //		System.out.println(filepaths[0]);
 //		System.exit(0);
@@ -53,10 +54,10 @@ public class Main {
 		System.out.println("Gesamtdauer: " +((ende - start) + (endwrite - startwrite)) + " ms");
 		
 		/* Der nachfolgende Block ist für den Fall, dass man die Datenbank später auf InnoDB-Basis laufen lassen will */
-//		start = System.currentTimeMillis();
+		start = System.currentTimeMillis();
 //		table.updateEngine(remote);
-//		ende = System.currentTimeMillis();
-//		System.out.println(("Dauer Update: " +(ende - start)) + " ms");
+		ende = System.currentTimeMillis();
+		System.out.println(("Dauer Update: " +(ende - start)) + " ms");
 		
 		/* Abschließend werden die erzeugten Dateien gelöscht, dies bringt bei wiederholten Durchgängen einen Vorteil von ~1.2 s. */
 		table.deleteFiles(filepaths);

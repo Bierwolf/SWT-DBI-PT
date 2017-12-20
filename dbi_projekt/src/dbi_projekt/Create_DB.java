@@ -104,8 +104,8 @@ public class Create_DB
 		 		"branchname char(20) not null," + 
 		 		"balance int not null," + 
 		 		"address char(72) not null," + 
-		 		"primary key (branchid) )" +
-		 		" ENGINE = MEMORY;"
+		 		"primary key (branchid) );" 
+//		 		"+ ENGINE = MEMORY;"
 		 		;
 		 
 		 String table_accounts ="create table IF NOT EXISTS accounts" + 
@@ -115,8 +115,8 @@ public class Create_DB
 		 		"branchid int not null," + 
 		 		"address char(68) not null," + 
 		 		"primary key (accid)," + 
-		 		"foreign key (branchid) references branches(branchid) )" +
-		 		" ENGINE = MEMORY ;"
+		 		"foreign key (branchid) references branches(branchid) );"
+//		 		"+ ENGINE = MEMORY ;"
 				 ;
 		 
 		 String table_tellers = "create table IF NOT EXISTS tellers" + 
@@ -126,8 +126,8 @@ public class Create_DB
 		 		"branchid int not null," + 
 		 		"address char(68) not null," + 
 		 		"primary key (tellerid)," + 
-		 		"foreign key (branchid) references branches(branchid) )" +
-		 		" ENGINE = MEMORY;"
+		 		"foreign key (branchid) references branches(branchid) );"
+//		 		"+ ENGINE = MEMORY;"
 		 		;
 		 		
 		 	String table_history = "create table IF NOT EXISTS history" + 
@@ -139,8 +139,8 @@ public class Create_DB
 		 		"cmmnt char(30) not null," + 
 		 		"foreign key (accid) references accounts(accid) ," + 
 		 		"foreign key (tellerid) references tellers(tellerid)," + 
-		 		"foreign key (branchid) references branches(branchid))" +
-			 	" ENGINE = MEMORY;"
+		 		"foreign key (branchid) references branches(branchid));" 
+//			 	"+ ENGINE = MEMORY;"
 				 ;
 		
 		 try {
