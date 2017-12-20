@@ -2,17 +2,21 @@ package dbi_projekt;
 
 import java.io.*;
 import java.sql.*;
-
+/**
+ * Enthält alle Funktionen die zum Erstellen und Befüllen der Test-Datenbank nötig sind.
+ * Die Strings zu Beginn enthalten alle nötigen Informationen für den Verbindungsaufbau.
+ */
 public class Create_DB 
 {
+	/* Für die Verbindung zur Datenbank nötige Informationen */
 	static final String USER = "dbi";
 	static final String PASS = "dbi_pass";
 	static final String CON_URL = "jdbc:mariadb://localhost:3306/";
 	static final String CON_URL_DB = "jdbc:mariadb://localhost:3306/benchmark";
 	static final String CON_REMOTE = "jdbc:mariadb://192.168.122.43:3306/";
 	static final String CON_REMOTE_DB = "jdbc:mariadb://192.168.122.43:3306/benchmark";
-	static final String FILE_NAME = "accounts.txt";
-	static final String[] filepaths = null; //Dieser ist nur für Exceptions
+	static final String[] filepaths = null; //Dieser ist nur für Exceptions deklariert
+	
 	
 	/**
 	 * Erstellt eine Datenbank auf einem durch 'remote' spezifierten DBMS. 
@@ -33,8 +37,6 @@ public class Create_DB
 			conn.setAutoCommit (false);
 			stmt = conn.createStatement();
 			stmt.executeUpdate("CREATE DATABASE IF NOT EXISTS benchmark");
-			stmt.executeUpdate("SET @@session.unique_checks = 0;");
-			stmt.executeUpdate("SET @@session.foreign_key_checks = 0;");
 			conn.commit();
 			conn.close();
 			
@@ -52,6 +54,7 @@ public class Create_DB
 			}
 		}
 	}
+	
 	
 	/**
 	 * Löscht die vorher mit createDatabase() erstellte Datenbank auf dem durch 'remote' angegebenen DBMS.
@@ -90,6 +93,7 @@ public class Create_DB
 		}
 	}
 	
+	
 	/**
 	 * Erstellt die vorgegebenen Tables in dem durch 'remote' angegebenen DBMS.
 	 * @param remote 'true', falls Remote Connection benutzt werden soll.
@@ -99,13 +103,12 @@ public class Create_DB
 		 Connection conn = null;
 		 Statement stmt = null;		 
 		 /* Strings müssen vorher erstellt werden, da Concat in executeUpdate() nicht erlaubt ist. Java Magic, fuck that */
-		 String table_branches = "create table IF NOT EXISTS branches" + 
+		 String table_branches = "create table IF NOT EXISTS branches" +
 		 		"( branchid int not null," + 
 		 		"branchname char(20) not null," + 
 		 		"balance int not null," + 
 		 		"address char(72) not null," + 
 		 		"primary key (branchid) );" 
-//		 		"+ ENGINE = MEMORY;"
 		 		;
 		 
 		 String table_accounts ="create table IF NOT EXISTS accounts" + 
@@ -115,8 +118,8 @@ public class Create_DB
 		 		"branchid int not null," + 
 		 		"address char(68) not null," + 
 		 		"primary key (accid)," + 
-		 		"foreign key (branchid) references branches(branchid) );"
-//		 		"+ ENGINE = MEMORY ;"
+		 		"foreign key (branchid) references branches(branchid) )"+
+		 		";"
 				 ;
 		 
 		 String table_tellers = "create table IF NOT EXISTS tellers" + 
@@ -126,8 +129,8 @@ public class Create_DB
 		 		"branchid int not null," + 
 		 		"address char(68) not null," + 
 		 		"primary key (tellerid)," + 
-		 		"foreign key (branchid) references branches(branchid) );"
-//		 		"+ ENGINE = MEMORY;"
+		 		"foreign key (branchid) references branches(branchid) )" +
+		 		";"
 		 		;
 		 		
 		 	String table_history = "create table IF NOT EXISTS history" + 
@@ -139,8 +142,8 @@ public class Create_DB
 		 		"cmmnt char(30) not null," + 
 		 		"foreign key (accid) references accounts(accid) ," + 
 		 		"foreign key (tellerid) references tellers(tellerid)," + 
-		 		"foreign key (branchid) references branches(branchid));" 
-//			 	"+ ENGINE = MEMORY;"
+		 		"foreign key (branchid) references branches(branchid))" +
+			 	";"
 				 ;
 		
 		 try {
@@ -173,6 +176,7 @@ public class Create_DB
 			}
 		}
 	}
+
 		
 	/**
 	 * Löscht alle Tables der Test-Datenbank, sofern sie vorhanden sind.
@@ -219,120 +223,23 @@ public class Create_DB
 		}
 	}
 	
-	/**
-	 * Übergibt die .txt-Dateien an das DBMS, wo diese intern verarbeitet werden.
-	 * @param filepaths Enthält die absoluten Pfade der erstellten .txt-Dateien mit den Daten.
-	 * @param remote 'true', falls Remote Connection benutzt werden soll.
-	 */
-	void execute(String[] filepaths, Boolean remote) 
-	{
-		Connection conn = null;
-		Statement stmt = null;
-		
-		try {
-			System.out.println("Loading files into DB..");
-			if (remote) 
-				conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
-			else
-				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			conn.setAutoCommit (false);
-			stmt = conn.createStatement();
-			String insertbranches = ("load data local infile '" + filepaths[0]  +"'"
-					+ " into table branches"
-					+ " fields terminated by ','"
-					+ " lines terminated by ';';");
-			String insertaccounts = ("load data local infile '"+ filepaths[1] +"'"
-					+ " into table accounts"
-					+ " fields terminated by ','"
-					+ " lines terminated by ';';");
-			String inserttellers = ("load data local infile '"+ filepaths[2] +"'"
-					+ " into table tellers"
-					+ " fields terminated by ','"
-					+ " lines terminated by ';';");
-			stmt.executeUpdate(insertbranches);
-			conn.commit();
-			stmt.executeUpdate(insertaccounts);
-			conn.commit();
-			stmt.executeUpdate(inserttellers);
-			conn.commit();
-			conn.close();
-			
-		} catch (SQLException e) {
-			System.out.println("Connection failed! Could not insert!");
-			e.printStackTrace();
-		}
-		finally {
-			try	{
-				if (stmt != null)
-					conn.close();
-				}
-			catch (SQLException se) {
-				se.printStackTrace();
-			}
-		}
-	}
 	
 	/**
-	 * Veraltete Befüllfunktion. Übergibt einfache Statements an das DBMS.
-	 * @param n Anzahl der Durchgänge(kann vom Nutzer beliebig gesteuert werden).
-	 * @param remote 'true', falls Remote Connection benutzt werden soll.
+	 * Erstellt ein Array von Zufallszahlen basierend auf n. Optimiert die Erstellung des Files in writeSql()
+	 * @param n
+	 * @return Array von Zufallszahlen, n * 100000 Werte zwischen und einschließlich 1 und n
 	 */
-	void fill (int n, Boolean remote)
-	{	
-		
-		Connection conn = null;
-		 Statement stmt = null;
-		 
-		String branchname = "ABCDEFGHIJKLMNOPQRST";
-		String adress_branches =  "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrst";
-		String name_account = "abcdefghijklmnopqrst";
-		String adress_accounts = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
-		String name_teller = "abcdefghijklmnopqrst";
-		String adress_teller = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
-//		String cmmnt = "AbcdefghijklmnopqrstuvwxyzAbcd";
-//		String insert = null ;
-		
-		int rndm = 0;
-		/*
-		 *  SQL-Statements für die einzelnen Tupel werden hier per Concatenate zusammengefügt und eingesetzt 
-		 */
-		try
+	int[] createRandoms(int n)
+	{
+		int[] rndm = new int[(n*100000)];
+		for (int i = 0; i < n * 100000; i++)
 		{
-			if (remote)
-				conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
-			else
-				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
-			conn.setAutoCommit (false);
-			stmt = conn.createStatement();
+			rndm[i] = (int) (Math.random() * n + 1);
 			
-			//Branches Insert
-			for (int i = 1; i <= n; i++)
-			{
-				stmt.executeUpdate(("insert into branches values ("+i + ","+ "'" + branchname +  "', 0, '" + adress_branches + "');"));
-			}
-			conn.commit();
-			
-			//Accounts Insert
-			for (int i = 1; i <= n * 100000; i++)
-			{
-				rndm = (int) (Math.random() * n + 1);
-				stmt.executeUpdate(("insert into accounts values ("+i + ", '" + name_account +  "', 0, " + rndm + ", '" + adress_accounts + "');"));
-			}
-			conn.commit();
-			
-			//Teller Insert
-			for (int i = 1; i <= n * 10; i++)
-			{
-				rndm = (int) (Math.random() * n + 1);
-				stmt.executeUpdate("insert into tellers values (" + i + ",'" + name_teller +  "', 0," + rndm + ",'" + adress_teller + "');");
-			}
-			conn.commit();
-			conn.close();
 		}
-		catch (SQLException se) {
-			se.printStackTrace();
-		}
+		return rndm;
 	}
+	
 	
 	/**
 	 * Methode erstellt .txt-Dateien mit Insert-Statements für branches, accounts und tellers. Diese wird dann in execute() für den Insert benutzt.
@@ -407,6 +314,124 @@ public class Create_DB
 		}
 		return filepaths;
 	}
+		
+	/**
+	 * Übergibt die .txt-Dateien an das DBMS, wo diese intern verarbeitet werden.
+	 * @param filepaths Enthält die absoluten Pfade der erstellten .txt-Dateien mit den Daten.
+	 * @param remote 'true', falls Remote Connection benutzt werden soll.
+	 */
+	void execute(String[] filepaths, Boolean remote) 
+	{
+		Connection conn = null;
+		Statement stmt = null;
+		
+		try {
+			System.out.println("Loading files into DB..");
+			if (remote) 
+				conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			conn.setAutoCommit (false);
+			stmt = conn.createStatement();
+			String insertbranches = ("load data local infile '" + filepaths[0] +"'"
+					+ " into table branches"
+					+ " fields terminated by ','"
+					+ " lines terminated by ';';");
+			String insertaccounts = ("load data local infile '"+ filepaths[1] +"'"
+					+ " into table accounts"
+					+ " fields terminated by ','"
+					+ " lines terminated by ';';");
+			String inserttellers = ("load data local infile '"+ filepaths[2] +"'"
+					+ " into table tellers"
+					+ " fields terminated by ','"
+					+ " lines terminated by ';';");
+			stmt.executeUpdate(insertbranches);
+			conn.commit();
+			stmt.executeUpdate(insertaccounts);
+			conn.commit();
+			stmt.executeUpdate(inserttellers);
+			conn.commit();
+			conn.close();
+			
+		} catch (SQLException e) {
+			System.out.println("Connection failed! Could not insert!");
+			e.printStackTrace();
+		}
+		finally {
+			try	{
+				if (stmt != null)
+					conn.close();
+				}
+			catch (SQLException se) {
+				se.printStackTrace();
+			}
+		}
+	}
+	
+	
+	/**
+	 * Veraltete Befüllfunktion. Übergibt einfache Statements an das DBMS.
+	 * @param n Anzahl der Durchgänge(kann vom Nutzer beliebig gesteuert werden).
+	 * @param remote 'true', falls Remote Connection benutzt werden soll.
+	 */
+	void fill (int n, Boolean remote)
+	{	
+		
+		Connection conn = null;
+		 Statement stmt = null;
+		 
+		String branchname = "ABCDEFGHIJKLMNOPQRST";
+		String adress_branches =  "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrst";
+		String name_account = "abcdefghijklmnopqrst";
+		String adress_accounts = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
+		String name_teller = "abcdefghijklmnopqrst";
+		String adress_teller = "AbcdefghijklmnopqrstuvwxyzAbcdefghijklmnopqrstuvwxyzAbcdefghijklmnop";
+//		String cmmnt = "AbcdefghijklmnopqrstuvwxyzAbcd";
+//		String insert = null ;
+		
+		int rndm = 0;
+		/*
+		 *  SQL-Statements für die einzelnen Tupel werden hier per Concatenate zusammengefügt und eingesetzt 
+		 */
+		try
+		{
+			if (remote)
+				conn = DriverManager.getConnection(CON_REMOTE_DB, USER, PASS);
+			else
+				conn = DriverManager.getConnection(CON_URL_DB, USER, PASS);
+			conn.setAutoCommit (false);
+			stmt = conn.createStatement();
+			
+			//Branches Insert
+			for (int i = 1; i <= n; i++)
+			{
+				stmt.executeUpdate(("insert into branches values ("+i + ","+ "'" + branchname +  "', 0, '" + adress_branches + "');"));
+			}
+			conn.commit();
+			
+			//Accounts Insert
+			for (int i = 1; i <= n * 100000; i++)
+			{
+				rndm = (int) (Math.random() * n + 1);
+				stmt.executeUpdate(("insert into accounts values ("+i + ", '" + name_account +  "', 0, " + rndm + ", '" + adress_accounts + "');"));
+			}
+			conn.commit();
+			
+			//Teller Insert
+			for (int i = 1; i <= n * 10; i++)
+			{
+				rndm = (int) (Math.random() * n + 1);
+				stmt.executeUpdate("insert into tellers values (" + i + ",'" + name_teller +  "', 0," + rndm + ",'" + adress_teller + "');");
+			}
+			conn.commit();
+			conn.close();
+		}
+		catch (SQLException se) {
+			se.printStackTrace();
+		}
+	}
+	
+
 	/**
 	 * Löscht die mit writeSQLFile() angelegten .txt-Dateien wieder (accounts.txt nimmt sonst bei n=50 ein knappes halbes GB auf der Platte ein!). Wird nach dem Benchmarking durchgeführt.
 	 * @param filepath Array mit den absoluten Pfaden der angelegten Dateien ([0]: branches.txt, [1]: accounts.txt, [2]: tellers.txt).
@@ -436,7 +461,7 @@ public class Create_DB
 	{
 		Connection conn = null;
 		Statement stmt = null;		 
-		/* Strings müssen vorher erstellt werden, da Concat in executeUpdate() nicht erlaubt ist. Java Magic, fuck that */
+		/* Strings müssen vorher erstellt werden, da Concat in executeUpdate() nicht erlaubt ist. */
 		String update_branches = "alter table branches ENGINE = INNODB;" ;
 		String update_accounts = "alter table accounts ENGINE = INNODB;" ;
 		String update_tellers = "alter table tellers ENGINE = INNODB;" ;
@@ -474,17 +499,6 @@ public class Create_DB
 					se.printStackTrace();
 				}
 		}
-	}
-	
-	int[] createRandoms(int n)
-	{
-		int[] rndm = new int[(n*100000)];
-		for (int i = 0; i < n * 100000; i++)
-		{
-			rndm[i] = (int) (Math.random() * n + 1);
-			
-		}
-		return rndm;
 	}
 }
 
