@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Benchmark.xml
+	Diese Template-Datei enthaelt Beispiel-Konfigurationsparameter fuer den Benchmark
+	Controller. Sie ist entsprechend anzupassen und direkt im Laufzeit-Directory des
+	Benchmark Controllers zur Verfuegung zu stellen.
+</comment>
+
+<!-- verpflichtende Konfigurationsparameter -->
+	<!-- Name des Benchmarks -->
+	<entry key="benchmark.name">MyBenchmark</entry>
+	<!-- JDBC-URL fuer die Datenbankverbindung -->
+	<entry key="database.jdbc.url">jdbc:mydbms://127.0.0.1/BENCHMARK</entry>
+	<!-- JDBC-Benutzername für die Datenbankverbindung -->
+	<entry key="database.jdbc.user">dbi</entry>
+	<!-- JDBC-Passwort fuer die Datenbankverbindung -->
+	<entry key="database.jdbc.password">dbi_pass</entry>
+	<!-- Klasse der DBMS-spezifischen Unterklasse von DBAccess (voll qualifizierter Name) -->
+	<entry key="database.class">de.whs.dbi.loaddriver.MyTransactionsForMyDBMS</entry>
+	<!-- Anzahl der LoadDriver -->
+	<entry key="loaddrivers">1</entry>
+	<!-- Level fuer die Logs im Dateisystem -->
+	<entry key="log.level">FINE</entry>
+	<!-- Zeit der Aufwaermphase in Sekunden -->
+	<entry key="warmup.time">5</entry>
+	<!-- Zeit der Benchmarkphase in Sekunden -->
+	<entry key="benchmark.time">5</entry>
+	<!-- Zeit der Ausschwingphase in Sekunden -->
+	<entry key="cooldown.time">5</entry>
+	<!-- durchschn. Verzoegerung (Bedenkzeit) zwischen zwei Transaktionen in Millisekunden -->
+	<entry key="thinktime">0</entry>
+	<!-- relatives Verzeichnis, wo die Ergebnisse der Loaddriver gespeichert werden -->
+	<entry key="log.directory">logs/</entry>
+	
+<!-- optionale benutzerdefinierte Konfigurationsparameter user.* -->
+	<!-- Skalierungsfaktor n -->
+	<entry key="user.n">10</entry>
+</properties>
