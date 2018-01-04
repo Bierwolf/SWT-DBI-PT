@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Communication.xml
+	Diese Template-Datei enthaelt Beispiel-Konfigurationsparameter fuer die RMI-
+	Einstellung. Sie ist entsprechend anzupassen und in den Laufzeit-Directories
+	fuer den Benchmark Controller und fuer die Load Driver zur Verfuegung zu stellen.
+</comment>
+<!-- Port der RMI-Registry (Standard: 1099) -->
+<entry key="registry.port">1099</entry>
+<!-- Host der RMI-Registry -->
+<entry key="server.host">127.0.0.1</entry>
+<!-- Port auf dem der Serversocket horcht -->
+<entry key="log.port">20000</entry>
+</properties>

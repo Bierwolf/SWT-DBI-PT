@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
+<properties>
+<comment>Transactions.xml
+	Diese Template-Datei enthaelt Beispiel-Konfigurationsparameter fuer die Load
+	Driver. Sie ist entsprechend anzupassen und direkt im Laufzeit-Directory des
+	Benchmark Controllers (!) zur Verfuegung zu stellen.
+</comment>
+<!-- Aufzaehlung aller Transaktionen des Lastprofils -->
+<!-- angegeben wird jeweils die implementierende Klasse und
+     eine relative Gewichtung innerhalb des Lastprofils -->
+<entry key="de.whs.example.LightExampleTransaction">1</entry>
+<entry key="de.whs.example.HeavyExampleTransaction">10</entry>
+</properties>
