@@ -1,11 +1,10 @@
 package verwaltung;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import personal.*;
 
-public class Personalverwaltung 
+public class Personalverwaltung
 {	
 	static ArrayList<Mitarbeiter> Verwaltung = new ArrayList<Mitarbeiter>();
 	
@@ -35,6 +34,9 @@ public class Personalverwaltung
 		print();
 		System.out.println("");
 		removedoubles();
+		print();
+		System.out.println("");
+		Collections.sort(Verwaltung);
 		print();
 		System.out.println("");
 		System.out.println(maxGehalt().toString());

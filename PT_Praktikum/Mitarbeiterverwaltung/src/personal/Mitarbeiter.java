@@ -2,7 +2,9 @@ package personal;
 
 import java.time.LocalDate;
 
-public abstract class Mitarbeiter
+import verwaltung.Haarfarbig;
+
+public abstract class Mitarbeiter implements Comparable<Mitarbeiter>, Haarfarbig
 {
 	private
 		String Name;
@@ -10,6 +12,7 @@ public abstract class Mitarbeiter
 		LocalDate Erstellungsdatum;
 		int Personal_ID;
 		static int id_counter=1;
+		int haarfarbe = 0;
 		
 	public Mitarbeiter(String Name, int Gehalt)
 	{
@@ -42,6 +45,12 @@ public abstract class Mitarbeiter
 		return (String) (Name + ","+ Gehalt + "," + Erstellungsdatum.toString() + "," + Personal_ID);
 	}
 
+	@Override
+	public int compareTo(Mitarbeiter a)
+	{
+		return this.Gehalt - a.getGehalt();
+	}
+	
 	public void setName(String name) {
 		Name = name;
 	}
@@ -66,6 +75,14 @@ public abstract class Mitarbeiter
 		return Personal_ID;
 	}
 	
+	@Override
+	public void setFarbe(int Farbe) {
+		haarfarbe = Farbe;
+	}
 	
+	@Override
+	public int getFarbe() {
+		return haarfarbe;
+	}
 	
 }
