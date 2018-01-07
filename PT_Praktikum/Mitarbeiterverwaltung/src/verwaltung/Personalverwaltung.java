@@ -10,9 +10,9 @@ public class Personalverwaltung
 	
 	public static void main (String[] args)
 	{		
-		Manager Kevin = new Manager("Kevin", 600, 50);
+		Manager Kevin = new Manager("Kevin", 600, 30);
 		Manager Nick = new Manager("Nick", 400, 50);
-		Manager Bob = new Manager("Bob", 400, 50);
+		Manager Bob = new Manager("Bob", 400, 20);
 		Verwaltung.add(Bob);
 		Verwaltung.add(Kevin);
 		Verwaltung.add(Nick);
@@ -41,6 +41,7 @@ public class Personalverwaltung
 		System.out.println("");
 		System.out.println(maxGehalt().toString());
 		System.out.println(minGehalt().toString());
+		System.out.println(MinMaxBonus());
 		return;
 	}
 	
@@ -85,10 +86,10 @@ public class Personalverwaltung
 	static public Mitarbeiter minGehalt()
 	{
 		int index = 0;
-		int gehalt = 0;
+		Integer gehalt = null;
 		for(Mitarbeiter m : Verwaltung)
 		{
-			if(gehalt == 0)
+			if(gehalt == null)
 			{
 				gehalt = m.getGehalt();
 				index = Verwaltung.indexOf(m);
@@ -102,5 +103,51 @@ public class Personalverwaltung
 		}
 		
 		return Verwaltung.get(index);
+	}
+	
+	static public Pair<Manager> MinMaxBonus()
+	{
+		int maxindex = 0;
+		Integer maxbonus = null;
+		for(Mitarbeiter m : Verwaltung)
+		{
+			if(m instanceof Manager)
+			{
+				if(maxbonus == null)
+				{
+					maxbonus = m.getGehalt();
+					maxindex = Verwaltung.indexOf(m);
+					
+				}
+				if(((Manager) m).getBonus() < maxbonus)
+				{
+					maxbonus = m.getGehalt();
+					maxindex = Verwaltung.indexOf(m);
+				}
+			}
+		}
+		
+		int minindex = 0;
+		Integer minbonus = null;
+		for(Mitarbeiter m : Verwaltung)
+		{
+			if(m instanceof Manager)
+			{
+				if(minbonus == null)
+				{
+					minbonus = m.getGehalt();
+					minindex = Verwaltung.indexOf(m);
+					
+				}
+				if(((Manager) m).getBonus() > maxbonus)
+				{
+					minbonus = m.getGehalt();
+					minindex = Verwaltung.indexOf(m);
+				}
+			}
+			
+		}
+		if(minbonus == null || maxbonus == null) {return new Pair<Manager>();}
+		return new Pair<Manager>((Manager) Verwaltung.get(minindex), (Manager) Verwaltung.get(maxindex));
 	}
 }
