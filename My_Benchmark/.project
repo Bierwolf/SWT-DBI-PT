@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>PT_Praktikum</name>
+	<name>My_Benchmark</name>
 	<comment></comment>
 	<projects>
+		<project>DBI_Benchmark</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
