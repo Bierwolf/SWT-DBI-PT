@@ -7,21 +7,21 @@
 	<!-- Name des Benchmarks -->
 	<entry key="benchmark.name">MyBenchmark</entry>
 	<!-- Name des Drivers -->
-	<entry key="database.jdbc.driver">org.sqlite.JDBC</entry>
+	<!--<entry key="database.jdbc.driver">org.mariadb.jdbc.Driver</entry>-->
 	<!-- JDBC-URL fuer die Datenbankverbindung -->
-	<entry key="database.jdbc.url">jdbc:sqlite:database.sqlite</entry>
+	<!--<entry key="database.jdbc.url">jdbc:mariadb</entry> -->
 
 	<!-- MySQL -->
-	<!--  <entry key="database.jdbc.driver">com.mysql.jdbc.Driver</entry>
-	<entry key="database.jdbc.url">jdbc:mysql://127.0.0.1/benchmark?rewriteBatchedStatements=true&amp;noAccessToProcedureBodies=true</entry>
+	<entry key="database.jdbc.driver">org.mariadb.jdbc.Driver</entry>
+	<entry key="database.jdbc.url">jdbc:mariadb://127.0.0.1/benchmark?rewriteBatchedStatements=true&amp;</entry>
 	<entry key="database.jdbc.user">dbi</entry>
 	<entry key="database.jdbc.password">dbi_pass</entry>
-	-->
+	
 
 	<!-- JDBC-Benutzername fuer die Datenbankverbindung -->
-	<!-- fuer SQLite auskommentiert <entry key="database.jdbc.user"/> -->
+	<!--dbi-->
 	<!-- JDBC-Passwort fuer die Datenbankverbindung -->
-	<!-- fuer SQLite auskommentiert <entry key="database.jdbc.password"/> -->
+	<!--dbi_pass-->
 
 	<!-- Anzahl der LoadDriver -->
 	<entry key="loaddrivers">1</entry>

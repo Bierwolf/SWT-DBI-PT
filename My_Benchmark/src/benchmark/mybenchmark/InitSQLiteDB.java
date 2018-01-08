@@ -128,7 +128,7 @@ public class InitSQLiteDB
 			System.out.println("Initialisierung der Datenbank:\n");
 			
 			// Laedt SQLite
-			Class.forName("org.sqlite.JDBC");
+			Class.forName("org.mariadb.jdbc.Driver");
 
 			// Laedt die Konfiguration
 			config = new Configuration();
