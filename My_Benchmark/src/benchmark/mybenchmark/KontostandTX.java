@@ -9,11 +9,11 @@ import de.whs.dbi.transactions.WeightedTransaction;
 import de.whs.dbi.util.Configuration;
 import de.whs.dbi.util.ParameterGenerator;
 
-public class SelectTx extends WeightedTransaction
+public class KontostandTX extends WeightedTransaction
 {
     private int n;
 
-	public SelectTx(Connection con, int weight, Configuration config) throws Exception
+	public KontostandTX(Connection con, int weight, Configuration config) throws Exception
 	{
 		super(con, weight, config);
         this.n = Integer.parseInt(config.getBenchmarkProperty("user.n"));

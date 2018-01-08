@@ -6,7 +6,8 @@
 <!-- Aufzaehlung aller Transaktionen des Lastprofils -->
 <!-- angegeben wird jeweils der qualifizierte Klassenname und
      eine relative Gewichtung innerhalb des Lastprofils -->
-<entry key="benchmark.mybenchmark.SelectTx">10</entry>
-<entry key="benchmark.mybenchmark.UpdateTx">1</entry>
+<entry key="benchmark.mybenchmark.AnalyseTX">15</entry>
+<entry key="benchmark.mybenchmark.EinzahlungTX">50</entry>
+<entry key="benchmark.mybenchmark.KontostandTX">35</entry>
 
 </properties>

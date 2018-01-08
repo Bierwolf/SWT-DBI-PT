@@ -34,7 +34,7 @@
 	<!-- Zeit der Ausschwingphase in Sekunden -->
 	<entry key="cooldown.time">4</entry>
 	<!-- durchschn. Verzoegerung (Bedenkzeit) zwischen zwei Transaktionen in Millisekunden -->
-	<entry key="thinktime">0</entry>
+	<entry key="thinktime">50</entry>
 	<!-- relatives Verzeichnis, wo die Ergebnisse der Loaddriver gespeichert werden -->
 	<entry key="log.directory">logs/</entry>
 
