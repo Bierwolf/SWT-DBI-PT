@@ -30,7 +30,7 @@ public class EinzahlungTX extends WeightedTransaction
         ResultSet rs = stmt.executeQuery("UPDATE branches as b, accounts as a, tellers as t"
                 + " SET b.balance = b.balance + "+ delta + ", a.balance = a.balance + " + delta + ", t.balance = t.balance + " + delta
                 + " WHERE b.branchid = a.branchid AND b.branchid = t.branchid AND " + accid  + "= a.accid");
-        rs = stmt.executeQuery("INSERT into history VALUES(" + accid + "," + tellerid + "," + delta + "," + branchid + ", (SELECT balance FROM accounts WHERE accid =" + accid + "), 'Random Transaction');");
+        ResultSet rrs = stmt.executeQuery("INSERT into history VALUES(" + accid + "," + tellerid + "," + delta + "," + branchid + ", (SELECT balance FROM accounts WHERE accid =" + accid + "), 'Random Transaction');");
         
         
         if (rs.next())
