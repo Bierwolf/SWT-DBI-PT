@@ -8,6 +8,5 @@
      eine relative Gewichtung innerhalb des Lastprofils -->
 <entry key="benchmark.mybenchmark.AnalyseTX">15</entry>
 <entry key="benchmark.mybenchmark.EinzahlungTX">50</entry>
-<entry key="benchmark.mybenchmark.KontostandTX">35</entry>
-
+<entry key="benchmark.mybenchmark.AnalyseTX">35</entry>
 </properties>

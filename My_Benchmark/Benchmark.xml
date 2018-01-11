@@ -7,32 +7,32 @@
 	<!-- Name des Benchmarks -->
 	<entry key="benchmark.name">MyBenchmark</entry>
 	<!-- Name des Drivers -->
-	<!--<entry key="database.jdbc.driver">org.mariadb.jdbc.Driver</entry>-->
+	<!--  <entry key="database.jdbc.driver">org.sqlite.JDBC</entry> -->
 	<!-- JDBC-URL fuer die Datenbankverbindung -->
-	<!--<entry key="database.jdbc.url">jdbc:mariadb</entry> -->
+	<!--  entry key="database.jdbc.url">jdbc:sqlite:database.sqlite</entry> -->
 
 	<!-- MySQL -->
 	<entry key="database.jdbc.driver">org.mariadb.jdbc.Driver</entry>
-	<entry key="database.jdbc.url">jdbc:mariadb://127.0.0.1/benchmark?rewriteBatchedStatements=true&amp;</entry>
+	<entry key="database.jdbc.url">jdbc:mariadb://192.168.122.43/benchmark?rewriteBatchedStatements=true&amp;noAccessToProcedureBodies=true</entry>
 	<entry key="database.jdbc.user">dbi</entry>
 	<entry key="database.jdbc.password">dbi_pass</entry>
 	
 
 	<!-- JDBC-Benutzername fuer die Datenbankverbindung -->
-	<!--dbi-->
+	<!-- fuer SQLite auskommentiert <entry key="database.jdbc.user"/> -->
 	<!-- JDBC-Passwort fuer die Datenbankverbindung -->
-	<!--dbi_pass-->
+	<!-- fuer SQLite auskommentiert <entry key="database.jdbc.password"/> -->
 
 	<!-- Anzahl der LoadDriver -->
-	<entry key="loaddrivers">1</entry>
+	<entry key="loaddrivers">5</entry>
 	<!-- Level fuer die Logs im Dateisystem -->
 	<entry key="log.level">FINEST</entry>
 	<!-- Zeit der Aufwaermphase in Sekunden -->
-	<entry key="warmup.time">4</entry>
+	<entry key="warmup.time">240</entry>
 	<!-- Zeit der Benchmarkphase in Sekunden -->
-	<entry key="benchmark.time">10</entry>
+	<entry key="benchmark.time">300</entry>
 	<!-- Zeit der Ausschwingphase in Sekunden -->
-	<entry key="cooldown.time">4</entry>
+	<entry key="cooldown.time">60</entry>
 	<!-- durchschn. Verzoegerung (Bedenkzeit) zwischen zwei Transaktionen in Millisekunden -->
 	<entry key="thinktime">50</entry>
 	<!-- relatives Verzeichnis, wo die Ergebnisse der Loaddriver gespeichert werden -->
@@ -40,6 +40,6 @@
 
 	<!-- optionale benutzerdefinierte Konfigurationsparameter user.* -->	
 	<!-- Skalierungsfaktor n -->
-	<entry key="user.n">10</entry>
+	<entry key="user.n">100</entry>
 	
 </properties>
