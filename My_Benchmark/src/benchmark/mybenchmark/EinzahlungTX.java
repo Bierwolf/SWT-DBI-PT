@@ -27,6 +27,7 @@ public class EinzahlungTX extends WeightedTransaction
         int tellerid = ParameterGenerator.generateRandomInt(1, n*10);
         int branchid = ParameterGenerator.generateRandomInt(1, n);
         int delta = ParameterGenerator.generateRandomInt(0, 10000);
+
 //        ResultSet rs = stmt.executeQuery("UPDATE branches as b, accounts as a, tellers as t"
 //                + " SET b.balance = b.balance + "+ delta + ", a.balance = a.balance + " + delta + ", t.balance = t.balance + " + delta
 //                + " WHERE b.branchid = a.branchid AND b.branchid = t.branchid AND " + accid  + "= a.accid");

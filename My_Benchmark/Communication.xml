@@ -5,7 +5,7 @@
 <!-- Port der RMI-Registry (Standard: 1099) -->
 <entry key="registry.port">1099</entry>
 <!-- Host der RMI-Registry -->
-<entry key="server.host">127.0.0.1</entry>
+<entry key="server.host">192.168.122.43</entry>
 <!-- Port auf dem der Serversocket horcht -->
 <entry key="log.port">20000</entry>
 </properties>
