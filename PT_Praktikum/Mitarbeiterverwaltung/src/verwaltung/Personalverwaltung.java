@@ -42,6 +42,13 @@ public class Personalverwaltung
 		System.out.println(maxGehalt().toString());
 		System.out.println(minGehalt().toString());
 		System.out.println(MinMaxBonus());
+		HashMap<Integer, Mitarbeiter> map = new HashMap<Integer, Mitarbeiter>();
+		
+		for(Mitarbeiter m : Verwaltung)
+		{
+			map.put(Verwaltung.indexOf(m), m);
+		}
+		
 		return;
 	}
 	
