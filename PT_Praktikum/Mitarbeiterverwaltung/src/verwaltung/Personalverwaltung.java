@@ -8,7 +8,7 @@ public class Personalverwaltung
 {	
 	static ArrayList<Mitarbeiter> Verwaltung = new ArrayList<Mitarbeiter>();
 	
-	public static void main (String[] args)
+	public Personalverwaltung ()
 	{		
 		Manager Kevin = new Manager("Kevin", 600, 30);
 		Manager Nick = new Manager("Nick", 400, 50);
