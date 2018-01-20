@@ -1,10 +1,17 @@
 package verwaltung;
 
 import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Collections;
 
+import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JTextPane;
 import javax.swing.table.*;
+
+import personal.*;
+
 import javax.swing.JTable;
 
 public class VerwaltungGui {
@@ -42,7 +49,7 @@ public class VerwaltungGui {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 450, 300);
+		frame.setBounds(0, 0, 450, 300);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -54,12 +61,39 @@ public class VerwaltungGui {
 		
 		DefaultTableModel model = new DefaultTableModel();
 		table = new JTable(model);
-		table.setBounds(415, 187, 100, 200);
+		table.setBounds(0, 20, 450, 300);
 		frame.getContentPane().add(table);
 		model.addColumn("Vorname");
 		model.addColumn("Einstellungsdatum");
 		model.addColumn("Gehalt");
-		model.addRow(new Object[] {Personalverwaltung.Verwaltung.get(0).getName(), Personalverwaltung.Verwaltung.get(0).getErstellungsdatum(), Personalverwaltung.Verwaltung.get(0).getGehalt()});
+		for (Mitarbeiter m : Personalverwaltung.Verwaltung)
+		{
+		int i = Personalverwaltung.Verwaltung.indexOf(m);	
+		model.addRow(new Object[] {Personalverwaltung.Verwaltung.get(i).getName(), Personalverwaltung.Verwaltung.get(i).getErstellungsdatum(), Personalverwaltung.Verwaltung.get(i).getGehalt()});
+		}
 		
+		JButton addButton = new JButton("Add");
+		 addButton.setBounds(0, 0, 128, 20);
+		 frame.getContentPane().add(addButton);
+		    addButton.addActionListener(new ActionListener() {
+
+		      public void actionPerformed(ActionEvent event) {
+		        String[] Mitarbeiter = { "", "", "" };
+		        model.addRow(Mitarbeiter);
+		        //doppelte loeschen und sortieren
+		        Personalverwaltung.removedoubles();
+		        Collections.sort(Personalverwaltung.Verwaltung);
+		      }
+		    });
+
+		 JButton removeButton = new JButton("Remove");
+		 removeButton.setBounds(128, 0, 128, 20);
+		 frame.getContentPane().add(removeButton);
+		 	removeButton.addActionListener(new ActionListener() {
+
+		      public void actionPerformed(ActionEvent event) {
+		        model.removeRow(table.getSelectedRow());
+		      }
+		    });
 	}
 }
