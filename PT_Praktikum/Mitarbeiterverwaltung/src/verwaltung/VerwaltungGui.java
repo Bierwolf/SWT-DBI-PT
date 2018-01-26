@@ -12,11 +12,17 @@ import javax.swing.table.*;
 import personal.*;
 
 import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
 public class VerwaltungGui {
 
 	private JFrame frame;
 	private JTable table;
+	private final JTextField textField = new JTextField();
+	private final JTextField textField_1 = new JTextField();
+	private final JTextField textField_2 = new JTextField();
+	private final JComboBox<String> comboBox = new JComboBox<String>(new String[] {"Angestellter", "Manager"});
 
 	/**
 	 * Launch the application.
@@ -80,17 +86,41 @@ public class VerwaltungGui {
 		addButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent event) {
-				Personalverwaltung.Verwaltung.add(new Manager("Bob", 30, 40));
-				//doppelte loeschen und sortieren
-				Personalverwaltung.removedoubles();
-				Collections.sort(Personalverwaltung.Verwaltung);
-				model.addRow(new Object[] {"Bob", LocalDate.now(), 30});
-		    }
+				if(comboBox.getSelectedIndex() == 0 && !textField.getText().isEmpty() && !textField_1.getText().isEmpty())
+				{
+					Personalverwaltung.Verwaltung.add(new Angestellter(textField.getText(), Integer.parseInt(textField_1.getText())));
+					//doppelte loeschen und sortieren
+					Personalverwaltung.removedoubles();
+					Collections.sort(Personalverwaltung.Verwaltung);
+					model.addRow(new Object[] {textField.getText(), LocalDate.now(), Integer.parseInt(textField_1.getText())});
+			    
+				}				
+				if(comboBox.getSelectedIndex() == 1 && !textField.getText().isEmpty() && !textField_1.getText().isEmpty() && !textField_2.getText().isEmpty())
+				{
+					Personalverwaltung.Verwaltung.add(new Manager(textField.getText(), Integer.parseInt(textField_1.getText()), Integer.parseInt(textField_2.getText())));
+					//doppelte loeschen und sortieren
+					Personalverwaltung.removedoubles();
+					Collections.sort(Personalverwaltung.Verwaltung);
+					model.addRow(new Object[] {textField.getText(), LocalDate.now(), Integer.parseInt(textField_1.getText())});
+			    
+				}
+			}
 		 });
 
 		 JButton removeButton = new JButton("Remove");
 		 removeButton.setBounds(128, 0, 128, 20);
 		 frame.getContentPane().add(removeButton);
+		 textField_2.setBounds(144, 500, 49, 31);
+		 frame.getContentPane().add(textField_2);
+		 textField_2.setColumns(10);
+		 textField_1.setBounds(85, 500, 49, 31);
+		 frame.getContentPane().add(textField_1);
+		 textField_1.setColumns(10);
+		 textField.setBounds(29, 500, 39, 31);
+		 frame.getContentPane().add(textField);
+		 textField.setColumns(10);
+		 comboBox.setBounds(200, 500, 200, 50);
+		 frame.getContentPane().add(comboBox);
 		 removeButton.addActionListener(new ActionListener() {
 
 			 public void actionPerformed(ActionEvent event) {
