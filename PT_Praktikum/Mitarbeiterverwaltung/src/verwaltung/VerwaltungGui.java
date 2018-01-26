@@ -53,11 +53,11 @@ public class VerwaltungGui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JTextPane textPane = new JTextPane();
+		/*JTextPane textPane = new JTextPane();
 		textPane.setBounds(36, 19, 278, 198);
 		frame.getContentPane().add(textPane);
 		textPane.setText(textPane.getText()+ Personalverwaltung.Verwaltung.get(0).toString());
-		textPane.setText(textPane.getText()+  "\n" + Personalverwaltung.Verwaltung.get(1).toString());
+		textPane.setText(textPane.getText()+  "\n" + Personalverwaltung.Verwaltung.get(1).toString());*/
 		
 		DefaultTableModel model = new DefaultTableModel();
 		table = new JTable(model);
@@ -92,7 +92,8 @@ public class VerwaltungGui {
 		 	removeButton.addActionListener(new ActionListener() {
 
 		      public void actionPerformed(ActionEvent event) {
-		        model.removeRow(table.getSelectedRow());
+		        if(table.getSelectedRow() != -1)
+		    	  model.removeRow(table.getSelectedRow());
 		      }
 		    });
 	}
