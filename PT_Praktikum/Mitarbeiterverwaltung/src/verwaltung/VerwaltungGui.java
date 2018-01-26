@@ -4,10 +4,7 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.table.*;
@@ -56,13 +53,15 @@ public class VerwaltungGui {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		/*JTextPane textPane = new JTextPane();
-		textPane.setBounds(36, 19, 278, 198);
-		frame.getContentPane().add(textPane);
-		textPane.setText(textPane.getText()+ Personalverwaltung.Verwaltung.get(0).toString());
-		textPane.setText(textPane.getText()+  "\n" + Personalverwaltung.Verwaltung.get(1).toString());*/
-		
-		DefaultTableModel model = new DefaultTableModel();
+		@SuppressWarnings("serial")
+		DefaultTableModel model = new DefaultTableModel() 
+		{			
+			@Override
+			public boolean isCellEditable(int row, int column) 
+			{
+		       return false;
+			}
+		};
 		table = new JTable(model);
 		table.setBounds(0, 20, 450, 300);
 		frame.getContentPane().add(table);
@@ -81,8 +80,6 @@ public class VerwaltungGui {
 		addButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent event) {
-//				String[] Mitarbeiter = { "Kevin", "200", "40" };
-//				model.addRow(Mitarbeiter);
 				Personalverwaltung.Verwaltung.add(new Manager("Bob", 30, 40));
 				//doppelte loeschen und sortieren
 				Personalverwaltung.removedoubles();

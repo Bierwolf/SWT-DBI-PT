@@ -31,17 +31,17 @@ public class Personalverwaltung
 		Verwaltung.add(Bob);
 		Verwaltung.add(Nick);
 		Verwaltung.add(Kevin);
-		print();
-		System.out.println("");
+//		print();
+//		System.out.println("");
 		removedoubles();
-		print();
-		System.out.println("");
+//		print();
+//		System.out.println("");
 		Collections.sort(Verwaltung);
-		print();
-		System.out.println("");
-		System.out.println(maxGehalt().toString());
-		System.out.println(minGehalt().toString());
-		System.out.println(MinMaxBonus());
+//		print();
+//		System.out.println("");
+//		System.out.println(maxGehalt().toString());
+//		System.out.println(minGehalt().toString());
+//		System.out.println(MinMaxBonus());
 		HashMap<Integer, Mitarbeiter> map = new HashMap<Integer, Mitarbeiter>();
 		
 		for(Mitarbeiter m : Verwaltung)
