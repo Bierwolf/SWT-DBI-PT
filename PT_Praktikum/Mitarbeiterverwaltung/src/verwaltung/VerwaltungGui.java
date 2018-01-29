@@ -4,7 +4,10 @@ import java.awt.EventQueue;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.table.*;
@@ -13,6 +16,8 @@ import personal.*;
 
 import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.JComboBox;
 
 public class VerwaltungGui {
@@ -60,7 +65,7 @@ public class VerwaltungGui {
 		frame.getContentPane().setLayout(null);
 		
 		@SuppressWarnings("serial")
-		DefaultTableModel model = new DefaultTableModel() 
+		DefaultTableModel model = new DefaultTableModel(new Object[] {"Vorname"}, 0) 
 		{			
 			@Override
 			public boolean isCellEditable(int row, int column) 
@@ -80,6 +85,13 @@ public class VerwaltungGui {
 		model.addRow(new Object[] {Personalverwaltung.Verwaltung.get(i).getName(), Personalverwaltung.Verwaltung.get(i).getErstellungsdatum(), Personalverwaltung.Verwaltung.get(i).getGehalt()});
 		}
 		
+		TableRowSorter<TableModel> sorter = new TableRowSorter<TableModel>(table.getModel());
+		table.setRowSorter(sorter);
+		List<RowSorter.SortKey> sortKeys = new ArrayList<>();
+		int columnIndex = 2;
+		sortKeys.add(new RowSorter.SortKey(columnIndex, SortOrder.ASCENDING));
+		sorter.setSortKeys(sortKeys);
+		
 		JButton addButton = new JButton("Add");
 		addButton.setBounds(0, 0, 128, 20);
 		frame.getContentPane().add(addButton);
@@ -93,7 +105,7 @@ public class VerwaltungGui {
 					Personalverwaltung.removedoubles();
 					Collections.sort(Personalverwaltung.Verwaltung);
 					model.addRow(new Object[] {textField.getText(), LocalDate.now(), Integer.parseInt(textField_1.getText())});
-			    
+					sorter.sort();
 				}				
 				if(comboBox.getSelectedIndex() == 1 && !textField.getText().isEmpty() && !textField_1.getText().isEmpty() && !textField_2.getText().isEmpty())
 				{
@@ -102,7 +114,7 @@ public class VerwaltungGui {
 					Personalverwaltung.removedoubles();
 					Collections.sort(Personalverwaltung.Verwaltung);
 					model.addRow(new Object[] {textField.getText(), LocalDate.now(), Integer.parseInt(textField_1.getText())});
-			    
+					sorter.sort();
 				}
 			}
 		 });
