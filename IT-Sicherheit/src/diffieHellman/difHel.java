@@ -43,10 +43,10 @@ public class difHel
 
 	public static void main(String[] args) 
 	{
-		//a ist prim aufgrund der Gruppe pi
-		int a = 3;
-		int x = 1;
-		int y = 4;
+		//a ist prim aufgrund der Gruppe pi, da a Element der Gruppe ist (a ist Generator)
+		int a = 7;
+		int x = 6;
+		int y = 5;
 		int keyA = createKey(a,x);
 		int keyB = createKey(a,y);
 		System.out.println(keyA);
