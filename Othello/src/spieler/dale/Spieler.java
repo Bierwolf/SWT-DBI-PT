@@ -4,6 +4,10 @@ import spieler.*;
 
 public class Spieler implements OthelloSpieler
 {
+//	Brett brett;
+	Farbe ich;
+	Farbe gegner;
+	
 	@Override
 	 public Zug berechneZug(Zug vorherigerZug, long zeitWeiss,
 	 long zeitSchwarz)
@@ -19,6 +23,13 @@ public class Spieler implements OthelloSpieler
 	 {
 	 // TODO Neues Spiel beginnen; beachten Sie die
 	 // Anfangsbelegung des Spielbretts!
+		 ich = meineFarbe;
+		 gegner = Farbe.WEISS;
+		 if (ich == Farbe.WEISS)
+			 gegner = Farbe.SCHWARZ;
+		 
+//		 brett = new Brett();
+//		 brett.initialisiereBrett();
 	 }
 	 
 	 @Override
