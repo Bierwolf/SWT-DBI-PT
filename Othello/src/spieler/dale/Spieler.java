@@ -4,16 +4,16 @@ import spieler.*;
 
 public class Spieler implements OthelloSpieler
 {
-	static int anzahl = 8;
-	private Farbe [][] brett = new Farbe [anzahl][anzahl];
+	static int groesse = 8;
+	private Farbe [][] brett = new Farbe [groesse][groesse];
 	Farbe ich;
 	Farbe gegner;
 	
 	private void neuesBrett()
 	  {
-	    for (int zeile = 0; zeile < 8; zeile++)
+	    for (int zeile = 0; zeile < groesse; zeile++)
 	    {
-	      for (int spalte = 0; spalte < 8; spalte++)
+	      for (int spalte = 0; spalte < groesse; spalte++)
 	        brett[zeile][spalte] = Farbe.LEER;
 	    }
 	    brett[3][3] = Farbe.WEISS;
