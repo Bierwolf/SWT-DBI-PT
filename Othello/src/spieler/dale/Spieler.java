@@ -44,6 +44,100 @@ public class Spieler implements OthelloSpieler
 		 neuesBrett();
 	 }
 	 
+	 public boolean legalerZug(int z, int s) {
+		 if(brett[z][s] == Farbe.LEER) {
+			 //rechts
+			 for(int i = 1; s+i <= 7; i++) {
+				 if(brett[z][s+i] == gegner) {
+					 i++;
+				 }else if(brett[z][s+i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z][s+1] == ich) {
+					 return true;
+				 }
+			 }
+			 
+			 //rechts unten
+			 for(int i = 1; s+i <= 7; i++) {
+				 if(brett[z+i][s+i] == gegner) {
+					 i++;
+				 }else if(brett[z+i][s+i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z+i][s+i] == ich) {
+					 return true;
+				 }
+			 }
+			 
+			 //unten
+			 for(int i = 1; s+i <= 7; i++) {
+				 if(brett[z+i][s] == gegner) {
+					 i++;
+				 }else if(brett[z+i][s] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z+i][s] == ich) {
+					 return true;
+				 }
+			 }
+			 
+			 //unten links
+			 for(int i = 1; s+i <= 7; i++) {
+				 if(brett[z+i][s-i] == gegner) {
+					 i++;
+				 }else if(brett[z+i][s-i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z+i][s-i] == ich) {
+					 return true;
+				 }
+			 }
+			 
+			 //links
+			 for(int i = 1; s+i <= 7; i++) {
+				 if(brett[z][s-i] == gegner) {
+					 i++;
+				 }else if(brett[z][s-i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z][s-i] == ich) {
+					 return true;
+				 }
+			 }
+			 
+			 //links oben
+			 for(int i = 1; s+i <= 7; i++) {
+				 if(brett[z-i][s-i] == gegner) {
+					 i++;
+				 }else if(brett[z-i][s-i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z-i][s-i] == ich) {
+					 return true;
+				 }
+			 }
+			 
+			 //oben
+			 for(int i = 1; s+i <= 7; i++) {
+				 if(brett[z-i][s] == gegner) {
+					 i++;
+				 }else if(brett[z-i][s] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z-i][s] == ich) {
+					 return true;
+				 }
+			 }
+			 
+			 //rechts oben
+			 for(int i = 1; s+i <= 7; i++) {
+				 if(brett[z-i][s+i] == gegner) {
+					 i++;
+				 }else if(brett[z-i][s+i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z-i][s+1] == ich) {
+					 return true;
+				 }
+			 }
+			 
+		 }
+		 return false;
+	 }
+	 
 	 @Override
 	 public String meinName()
 	 {
