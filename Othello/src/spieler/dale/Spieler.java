@@ -4,6 +4,8 @@ import spieler.*;
 
 public class Spieler implements OthelloSpieler
 {
+	public Spieler() {};
+	
 	static int groesse = 8;
 	private Farbe [][] brett = new Farbe [groesse][groesse];
 	Farbe ich;
@@ -27,8 +29,20 @@ public class Spieler implements OthelloSpieler
 	 long zeitSchwarz)
 	 throws ZugException
 	 {
-	 // TODO Eigenen Zug berechnen
-	 return null;
+		if(vorherigerZug != null && vorherigerZug.getPassen() != true)
+			aktualisiereBrett(vorherigerZug.getZeile(), vorherigerZug.getSpalte(), gegner, ich);
+		for(int i = 0; i <= 7; i++) {
+			for(int j = 0; j <= 7; j++) {
+				if(legalerZug(i,j)) {
+					aktualisiereBrett(i,j, ich, gegner);
+					return new Zug(i,j);
+				}
+			}
+			
+		}
+		Zug Pass = new Zug(0,0);
+		Pass.setPassen();
+		return Pass;
 	 }
 	
 	 @Override
@@ -43,93 +57,242 @@ public class Spieler implements OthelloSpieler
 			 gegner = Farbe.SCHWARZ;
 		 neuesBrett();
 	 }
-	 
-	 public boolean legalerZug(int z, int s) {
+
+	 public void aktualisiereBrett(int z, int s, Farbe ich, Farbe gegner) {
 		 if(brett[z][s] == Farbe.LEER) {
 			 //rechts
-			 for(int i = 1; s+i <= 7; i++) {
+			 for(int i = 1; s+i <= 7;) {
 				 if(brett[z][s+i] == gegner) {
 					 i++;
 				 }else if(brett[z][s+i] == Farbe.LEER) {
 					 break;
-				 }else if(brett[z][s+1] == ich) {
+				 }else if(brett[z][s+i] == ich && i == 1) {
+					 break;
+				 }else if(brett[z][s+i] == ich && i > 1) {
+					 for(int j = 0; j <= i; j++) {
+						 brett[z][s+j] = ich;
+					 }
+					 break;
+				 }
+			 }
+			 
+			 //rechts unten
+			 for(int i = 1; s+i <= 7 && z+i <= 7;) {
+				 if(brett[z+i][s+i] == gegner) {
+					 i++;
+				 }else if(brett[z+i][s+i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z+i][s+i] == ich && i == 1) {
+					 break;
+				 }else if(brett[z+i][s+i] == ich && i > 1) {
+					 for(int j = 0; j <= i; j++) {
+						 brett[z+j][s+j] = ich;
+					 }
+					 break;
+				 }
+			 }
+			 
+			 //unten
+			 for(int i = 1; z+i <= 7;) {
+				 if(brett[z+i][s] == gegner) {
+					 i++;
+				 }else if(brett[z+i][s] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z+i][s] == ich && i == 1) {
+					 break;
+				 }else if(brett[z+i][s] == ich && i > 1) {
+					 for(int j = 0; j <= i; j++) {
+						 brett[z+j][s] = ich;
+					 }
+					 break;
+				 }
+			 }
+			 
+			 //links unten
+			 for(int i = 1; z+i <= 7 && s-i >= 0;) {
+				 if(brett[z+i][s-i] == gegner) {
+					 i++;
+				 }else if(brett[z+i][s-i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z+i][s-i] == ich && i == 1) {
+					 break;
+				 }else if(brett[z+i][s-i] == ich && i > 1) {
+					 for(int j = 0; j <= i; j++) {
+						 brett[z+j][s-j] = ich;
+					 }
+					 break;
+				 }
+			 }
+			 
+			 //links
+			 for(int i = 1; s-i >= 0;) {
+				 if(brett[z][s-i] == gegner) {
+					 i++;
+				 }else if(brett[z][s-i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z][s-i] == ich && i == 1) {
+					 break;
+				 }else if(brett[z][s-i] == ich && i > 1) {
+					 for(int j = 0; j <= i; j++) {
+						 brett[z][s-j] = ich;
+					 }
+					 break;
+				 }
+			 }
+			 
+			 //links oben
+			 for(int i = 1; z-i >= 0 && s-i >= 0;) {
+				 if(brett[z-i][s-i] == gegner) {
+					 i++;
+				 }else if(brett[z-i][s-i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z-i][s-i] == ich && i == 1) {
+					break;
+				 }else if(brett[z-i][s-i] == ich && i > 1) {
+					 for(int j = 0; j <= i; j++) {
+						 brett[z-i][s-j] = ich;
+					 }
+					 break;
+				 }
+			 }
+			 
+			 //oben
+			 for(int i = 1; z-i >= 0;) {
+				 if(brett[z-i][s] == gegner) {
+					 i++;
+				 }else if(brett[z-i][s] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z-i][s] == ich && i == 1) {
+					 break;
+				 }else if(brett[z-i][s] == ich && i > 1) {
+					 for(int j = 0; j <= i; j++) {
+						 brett[z-j][s] = ich;
+					 }
+					 break;
+				 }
+			 }
+			 
+			 //rechts oben
+			 for(int i = 1; s+i <= 7 && z-i >= 0;) {
+				 if(brett[z-i][s+i] == gegner) {
+					 i++;
+				 }else if(brett[z-i][s+i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z-i][s+i] == ich && i == 1) {
+					 break;
+				 }else if(brett[z-i][s+i] == ich && i > 1) {
+					 for(int j = 0; j <= i; j++) {
+						 brett[z-j][s+j] = ich;
+					 }
+					 break;
+				 }
+			 }
+			 
+		 }
+	 }
+	 
+	 public boolean legalerZug(int z, int s) {
+		 if(brett[z][s] == Farbe.LEER) {
+			 //rechts
+			 for(int i = 1; s+i <= 7;) {
+				 if(brett[z][s+i] == gegner) {
+					 i++;
+				 }else if(brett[z][s+i] == Farbe.LEER) {
+					 break;
+				 }else if(brett[z][s+i] == ich && i == 1) {
+					 break;
+				 }else if(brett[z][s+i] == ich && i > 1) {
 					 return true;
 				 }
 			 }
 			 
 			 //rechts unten
-			 for(int i = 1; s+i <= 7; i++) {
+			 for(int i = 1; s+i <= 7 && z+i <= 7;) {
 				 if(brett[z+i][s+i] == gegner) {
 					 i++;
 				 }else if(brett[z+i][s+i] == Farbe.LEER) {
 					 break;
-				 }else if(brett[z+i][s+i] == ich) {
+				 }else if(brett[z+i][s+i] == ich && i == 1) {
+					 break;
+				 }else if(brett[z+i][s+i] == ich && i > 1) {
 					 return true;
 				 }
 			 }
 			 
 			 //unten
-			 for(int i = 1; s+i <= 7; i++) {
+			 for(int i = 1; z+i <= 7;) {
 				 if(brett[z+i][s] == gegner) {
 					 i++;
 				 }else if(brett[z+i][s] == Farbe.LEER) {
 					 break;
-				 }else if(brett[z+i][s] == ich) {
+				 }else if(brett[z+i][s] == ich && i == 1) {
+					 break;
+				 }else if(brett[z+i][s] == ich && i > 1) {
 					 return true;
 				 }
 			 }
 			 
-			 //unten links
-			 for(int i = 1; s+i <= 7; i++) {
+			 //links unten
+			 for(int i = 1; z+i <= 7 && s-i >= 0;) {
 				 if(brett[z+i][s-i] == gegner) {
 					 i++;
 				 }else if(brett[z+i][s-i] == Farbe.LEER) {
 					 break;
-				 }else if(brett[z+i][s-i] == ich) {
+				 }else if(brett[z+i][s-i] == ich && i == 1) {
+					 break;
+				 }else if(brett[z+i][s-i] == ich && i > 1) {
 					 return true;
 				 }
 			 }
 			 
 			 //links
-			 for(int i = 1; s+i <= 7; i++) {
+			 for(int i = 1; s-i >= 0;) {
 				 if(brett[z][s-i] == gegner) {
 					 i++;
 				 }else if(brett[z][s-i] == Farbe.LEER) {
 					 break;
-				 }else if(brett[z][s-i] == ich) {
+				 }else if(brett[z][s-i] == ich && i == 1) {
+					 break;
+				 }else if(brett[z][s-i] == ich && i > 1) {
 					 return true;
 				 }
 			 }
 			 
 			 //links oben
-			 for(int i = 1; s+i <= 7; i++) {
+			 for(int i = 1; z-i >= 0 && s-i >= 0;) {
 				 if(brett[z-i][s-i] == gegner) {
 					 i++;
 				 }else if(brett[z-i][s-i] == Farbe.LEER) {
 					 break;
-				 }else if(brett[z-i][s-i] == ich) {
+				 }else if(brett[z-i][s-i] == ich && i == 1) {
+					break;
+				 }else if(brett[z-i][s-i] == ich && i > 1) {
 					 return true;
 				 }
 			 }
 			 
 			 //oben
-			 for(int i = 1; s+i <= 7; i++) {
+			 for(int i = 1; z-i >= 0;) {
 				 if(brett[z-i][s] == gegner) {
 					 i++;
 				 }else if(brett[z-i][s] == Farbe.LEER) {
 					 break;
-				 }else if(brett[z-i][s] == ich) {
+				 }else if(brett[z-i][s] == ich && i == 1) {
+					 break;
+				 }else if(brett[z-i][s] == ich && i > 1) {
 					 return true;
 				 }
 			 }
 			 
 			 //rechts oben
-			 for(int i = 1; s+i <= 7; i++) {
+			 for(int i = 1; s+i <= 7 && z-i >= 0;) {
 				 if(brett[z-i][s+i] == gegner) {
 					 i++;
 				 }else if(brett[z-i][s+i] == Farbe.LEER) {
 					 break;
-				 }else if(brett[z-i][s+1] == ich) {
+				 }else if(brett[z-i][s+i] == ich && i == 1) {
+					 break;
+				 }else if(brett[z-i][s+i] == ich && i > 1) {
 					 return true;
 				 }
 			 }
