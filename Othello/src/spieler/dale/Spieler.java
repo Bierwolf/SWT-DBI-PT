@@ -12,12 +12,12 @@ public class Spieler implements OthelloSpieler
 	static int groesse = 8;
 	private Farbe [][] brett = new Farbe [groesse][groesse];
 	private int[][] Values = { 	{30,-4,12,10,10,12,-4,30},
-								{-4,-8,-4,2,2-4,-8-4},
+								{-4,-8,-4,2,2,-4,-8,-4},
 								{12,-4,2,2,2,2,-4,12},
 								{10,2,2,-4,-4,2,2,10},
 								{10,2,2,-4,-4,2,2,10},
 								{12,-4,2,2,2,2,-4,12},
-								{-4,-8,-4,2,2-4,-8-4},
+								{-4,-8,-4,2,2,-4,-8,-4},
 								{30,-4,12,10,10,12,-4,30}			
 								};
 	Farbe ich;
@@ -54,7 +54,7 @@ public class Spieler implements OthelloSpieler
 			
 		}
 		if(ZugListe.isEmpty()) {
-			Zug Pass = new Zug(0,0);
+			Zug Pass = new Zug(-1,-1);
 			Pass.setPassen();
 			return Pass;
 		}
