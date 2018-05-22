@@ -1,5 +1,9 @@
 package spieler.dale;
 
+import java.util.ArrayList;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
+
 import spieler.*;
 
 public class Spieler implements OthelloSpieler
@@ -29,20 +33,27 @@ public class Spieler implements OthelloSpieler
 	 long zeitSchwarz)
 	 throws ZugException
 	 {
+		ArrayList<Zug> ZugListe = new ArrayList<Zug>();
 		if(vorherigerZug != null && vorherigerZug.getPassen() != true)
 			aktualisiereBrett(vorherigerZug.getZeile(), vorherigerZug.getSpalte(), gegner, ich);
 		for(int i = 0; i <= 7; i++) {
 			for(int j = 0; j <= 7; j++) {
 				if(legalerZug(i,j)) {
-					aktualisiereBrett(i,j, ich, gegner);
-					return new Zug(i,j);
+					ZugListe.add(new Zug(i,j));					
+					
 				}
 			}
 			
 		}
-		Zug Pass = new Zug(0,0);
-		Pass.setPassen();
-		return Pass;
+		if(ZugListe.isEmpty()) {
+			Zug Pass = new Zug(0,0);
+			Pass.setPassen();
+			return Pass;
+		}
+		Zug Zug = ZugListe.get(ThreadLocalRandom.current().nextInt(0, ZugListe.size()));
+		aktualisiereBrett(Zug.getZeile(),Zug.getSpalte(), ich, gegner);
+		return Zug;
+		
 	 }
 	
 	 @Override
@@ -150,7 +161,7 @@ public class Spieler implements OthelloSpieler
 					break;
 				 }else if(brett[z-i][s-i] == ich && i > 1) {
 					 for(int j = 0; j <= i; j++) {
-						 brett[z-i][s-j] = ich;
+						 brett[z-j][s-j] = ich;
 					 }
 					 break;
 				 }
