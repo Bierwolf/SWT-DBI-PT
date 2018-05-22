@@ -5,9 +5,9 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import spieler.*;
 
-public class Spieler implements OthelloSpieler
+public class Zufallsspieler implements OthelloSpieler
 {
-	public Spieler() {};
+	public Zufallsspieler() {};
 	
 	static int groesse = 8;
 	private Farbe [][] brett = new Farbe [groesse][groesse];
@@ -58,18 +58,7 @@ public class Spieler implements OthelloSpieler
 			Pass.setPassen();
 			return Pass;
 		}
-		//Zug Zug = ZugListe.get(ThreadLocalRandom.current().nextInt(0, ZugListe.size()));
-		Zug Zug = new Zug(-1,-1);
-		for(Zug z : ZugListe) {
-			if(Zug.getZeile() == -1)
-			{
-				Zug = z;
-			}else if(
-				Values[z.getZeile()][z.getSpalte()] > Values[Zug.getZeile()][Zug.getSpalte()]) {
-				Zug = z;
-			}
-			
-		}
+		Zug Zug = ZugListe.get(ThreadLocalRandom.current().nextInt(0, ZugListe.size()));
 		aktualisiereBrett(Zug.getZeile(),Zug.getSpalte(), ich, gegner);
 		return Zug;
 		
@@ -332,6 +321,6 @@ public class Spieler implements OthelloSpieler
 	 @Override
 	 public String meinName()
 	 {
-	 return "dale";
+	 return "Zufall";
 	 }
 }
