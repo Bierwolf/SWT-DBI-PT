@@ -71,17 +71,17 @@ public class Spieler implements OthelloSpieler
 //			}
 //			
 //		}
-		ArrayList<Zug> list = new ArrayList<Zug>() {{
-		    for(int i = 0; i <= Rekursionstiefe; i++) {
-		    	add(new Zug(-5,-5));
-		    }
-		}};
-		ArrayList<Zug> currentlist = new ArrayList<Zug>() {{
-		    for(int i = 0; i <= Rekursionstiefe; i++) {
-		    	add(new Zug(-5,-5));
-		    }
-		}};
-		ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, 0, list, currentlist);
+//		ArrayList<Zug> list = new ArrayList<Zug>() {{
+//		    for(int i = 0; i <= Rekursionstiefe; i++) {
+//		    	add(new Zug(-5,-5));
+//		    }
+//		}};
+//		ArrayList<Zug> currentlist = new ArrayList<Zug>() {{
+//		    for(int i = 0; i <= Rekursionstiefe; i++) {
+//		    	add(new Zug(-5,-5));
+//		    }
+//		}};
+		ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, 0, new ArrayList<Zug>(), new ArrayList<Zug>());
 		Zug Zug = besterPfad.get(0);
 		brett = aktualisiereBrett(brett, Zug.getZeile(),Zug.getSpalte(), ich, gegner);
 		//return besterPfad.get(besterPfad.size()-1);
@@ -100,9 +100,14 @@ public class Spieler implements OthelloSpieler
 		}
 				
 		if(Tiefe == Rekursionstiefe) {
-			// TODO Passen benötigt noch dringende einbindung in die vorrausrechnung
-			
 			if(ZugListe.isEmpty()) {
+				Zug Pass = new Zug(-1,-1);
+				Pass.setPassen();
+				if(AktuellerPfad.size()-1 < Tiefe) {
+					AktuellerPfad.add(Pass);
+				}else {
+					AktuellerPfad.set(Tiefe, Pass);
+				}
 			}else {
 				Zug Zug = new Zug(-5,-5);
 				for(Zug z : ZugListe) {
@@ -113,7 +118,11 @@ public class Spieler implements OthelloSpieler
 						Zug = z;
 					}
 				}
-				AktuellerPfad.set(Tiefe, Zug);
+				if(AktuellerPfad.size()-1 < Tiefe) {
+					AktuellerPfad.add(Zug);
+				}else {
+					AktuellerPfad.set(Tiefe, Zug);					
+				}
 			}
 			
 			if(getZugListeValue(AktuellerPfad) > getZugListeValue(BesterPfad)) {
@@ -127,13 +136,20 @@ public class Spieler implements OthelloSpieler
 			if(ZugListe.isEmpty()) {
 				Zug Pass = new Zug(-1,-1);
 				Pass.setPassen();
-				AktuellerPfad.set(Tiefe, Pass);
-				BesterPfad = berechneNächsterZug(brett, gegner, ich, (Tiefe+1), AktuellerPfad, BesterPfad);
+				if(AktuellerPfad.size()-1 < Tiefe) {
+					AktuellerPfad.add(Pass);
 				}else {
-					for(Zug y : ZugListe) {
-						AktuellerPfad.set(Tiefe, y);
-						BesterPfad = berechneNächsterZug(aktualisiereBrett(brett, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich, (Tiefe+1), AktuellerPfad, BesterPfad);
-					
+					AktuellerPfad.set(Tiefe, Pass);					
+				}
+				BesterPfad = berechneNächsterZug(brett, gegner, ich, (Tiefe+1), AktuellerPfad, BesterPfad);
+			}else {
+				for(Zug y : ZugListe) {
+					if(AktuellerPfad.size()-1 < Tiefe) {
+						AktuellerPfad.add(y);
+					}else {
+						AktuellerPfad.set(Tiefe, y);					
+					}
+					BesterPfad = berechneNächsterZug(aktualisiereBrett(brett, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich, (Tiefe+1), AktuellerPfad, BesterPfad);		
 				}
 			}
 			return BesterPfad;
@@ -142,7 +158,10 @@ public class Spieler implements OthelloSpieler
 	}
 	
 	public int getZugListeValue(ArrayList<Zug> ZugListe) {
-		if(ZugListe.get(0).getZeile() == -5) {
+//		if(ZugListe.get(0).getZeile() == -5) {
+//			return -1000;
+//		}
+		if(ZugListe.isEmpty()) {
 			return -1000;
 		}
 		int flipper = 1;
