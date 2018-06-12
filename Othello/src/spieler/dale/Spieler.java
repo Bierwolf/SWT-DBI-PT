@@ -43,34 +43,34 @@ public class Spieler implements OthelloSpieler
 	 long zeitSchwarz)
 	 throws ZugException
 	 {
-		ArrayList<Zug> ZugListe = new ArrayList<Zug>();
+//		ArrayList<Zug> ZugListe = new ArrayList<Zug>();
 		if(vorherigerZug != null && vorherigerZug.getPassen() != true)
 			brett = aktualisiereBrett(brett, vorherigerZug.getZeile(), vorherigerZug.getSpalte(), gegner, ich);
-		for(int i = 0; i <= 7; i++) {
-			for(int j = 0; j <= 7; j++) {
-				if(legalerZug(brett, i, j, ich, gegner)) {
-					ZugListe.add(new Zug(i,j));					
-					
-				}
-			}
-			
-		}
-		if(ZugListe.isEmpty()) {
-			Zug Pass = new Zug(-1,-1);
-			Pass.setPassen();
-			return Pass;
-		}
-		//Zug Zug = ZugListe.get(ThreadLocalRandom.current().nextInt(0, ZugListe.size()));
-		Zug Zug = new Zug(-1,-1);
-		for(Zug z : ZugListe) {
-			if(Zug.getZeile() == -1)
-			{
-				Zug = z;
-			}else if(getValue(z) > getValue(Zug)) {
-				Zug = z;
-			}
-			
-		}
+//		for(int i = 0; i <= 7; i++) {
+//			for(int j = 0; j <= 7; j++) {
+//				if(legalerZug(brett, i, j, ich, gegner)) {
+//					ZugListe.add(new Zug(i,j));					
+//					
+//				}
+//			}
+//			
+//		}
+//		if(ZugListe.isEmpty()) {
+//			Zug Pass = new Zug(-1,-1);
+//			Pass.setPassen();
+//			return Pass;
+//		}
+//		//Zug Zug = ZugListe.get(ThreadLocalRandom.current().nextInt(0, ZugListe.size()));
+//		Zug Zug = new Zug(-1,-1);
+//		for(Zug z : ZugListe) {
+//			if(Zug.getZeile() == -1)
+//			{
+//				Zug = z;
+//			}else if(getValue(z) > getValue(Zug)) {
+//				Zug = z;
+//			}
+//			
+//		}
 		ArrayList<Zug> list = new ArrayList<Zug>() {{
 		    for(int i = 0; i <= Rekursionstiefe; i++) {
 		    	add(new Zug(-5,-5));
@@ -82,6 +82,7 @@ public class Spieler implements OthelloSpieler
 		    }
 		}};
 		ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, 0, list, currentlist);
+		Zug Zug = besterPfad.get(0);
 		brett = aktualisiereBrett(brett, Zug.getZeile(),Zug.getSpalte(), ich, gegner);
 		//return besterPfad.get(besterPfad.size()-1);
 		return Zug;
@@ -94,32 +95,26 @@ public class Spieler implements OthelloSpieler
 			for(int j = 0; j <= 7; j++) {
 				if(legalerZug(brett, i, j, ich, gegner)) {
 					ZugListe.add(new Zug(i,j));					
-					
 				}
-			}
-			
-		}
-		
-		if(ZugListe.isEmpty()) {
-			Zug Pass = new Zug(-1,-1);
-			Pass.setPassen();
-			BesterPfad.set(Tiefe, Pass);
-			return BesterPfad;
+			}			
 		}
 				
 		if(Tiefe == Rekursionstiefe) {
 			// TODO Passen benötigt noch dringende einbindung in die vorrausrechnung
 			
-			Zug Zug = new Zug(-5,-5);
-			for(Zug z : ZugListe) {
-				if(Zug.getZeile() == -5)
-				{
-					Zug = z;
-				}else if(getValue(z) > getValue(Zug)) {
-					Zug = z;
+			if(ZugListe.isEmpty()) {
+			}else {
+				Zug Zug = new Zug(-5,-5);
+				for(Zug z : ZugListe) {
+					if(Zug.getZeile() == -5)
+					{
+						Zug = z;
+					}else if(getValue(z) > getValue(Zug)) {
+						Zug = z;
+					}
 				}
+				AktuellerPfad.set(Tiefe, Zug);
 			}
-			AktuellerPfad.set(Tiefe, Zug);
 			
 			if(getZugListeValue(AktuellerPfad) > getZugListeValue(BesterPfad)) {
 				BesterPfad.clear();
@@ -129,9 +124,17 @@ public class Spieler implements OthelloSpieler
 			
 			return BesterPfad;
 		}else {
-			for(Zug y : ZugListe) {
-				AktuellerPfad.set(Tiefe, y);
-				BesterPfad = berechneNächsterZug(aktualisiereBrett(brett, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich, (Tiefe+1), AktuellerPfad, BesterPfad);
+			if(ZugListe.isEmpty()) {
+				Zug Pass = new Zug(-1,-1);
+				Pass.setPassen();
+				AktuellerPfad.set(Tiefe, Pass);
+				BesterPfad = berechneNächsterZug(brett, gegner, ich, (Tiefe+1), AktuellerPfad, BesterPfad);
+				}else {
+					for(Zug y : ZugListe) {
+						AktuellerPfad.set(Tiefe, y);
+						BesterPfad = berechneNächsterZug(aktualisiereBrett(brett, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich, (Tiefe+1), AktuellerPfad, BesterPfad);
+					
+				}
 			}
 			return BesterPfad;
 		}
@@ -161,7 +164,6 @@ public class Spieler implements OthelloSpieler
 		}
 	}
 
-	
 	 @Override
 	 public void neuesSpiel(Farbe meineFarbe,
 	 int bedenkzeitInSekunden)
@@ -174,6 +176,9 @@ public class Spieler implements OthelloSpieler
 	 }
 
 	 public Farbe[][] aktualisiereBrett(Farbe[][] brett, int z, int s, Farbe ich, Farbe gegner) {
+		if(z == -1 || s == -1) {
+			return brett;
+		}
 		 if(brett[z][s] == Farbe.LEER) {
 			 //rechts
 			 for(int i = 1; s+i <= 7;) {
