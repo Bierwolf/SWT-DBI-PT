@@ -10,7 +10,7 @@ public class Spieler implements OthelloSpieler
 	public Spieler() {};
 	
 	static int groesse = 8;
-	int Rekursionstiefe = 4;
+	int Rekursionstiefe = 3;
 	private Farbe [][] brett = new Farbe [groesse][groesse];
 	private int[][] Values = { 	{30,-4,12,10,10,12,-4,30},
 								{-4,-8,-4,2,2,-4,-8,-4},
@@ -71,15 +71,24 @@ public class Spieler implements OthelloSpieler
 			}
 			
 		}
-
-		//ArrayList<Zug> besterPfad= berechneNächsterZug(brett, ich, gegner, 0, new ArrayList<Zug>());
+		ArrayList<Zug> list = new ArrayList<Zug>() {{
+		    for(int i = 0; i <= Rekursionstiefe; i++) {
+		    	add(new Zug(-5,-5));
+		    }
+		}};
+		ArrayList<Zug> currentlist = new ArrayList<Zug>() {{
+		    for(int i = 0; i <= Rekursionstiefe; i++) {
+		    	add(new Zug(-5,-5));
+		    }
+		}};
+		//ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, 0, list, currentlist);
 		brett = aktualisiereBrett(brett, Zug.getZeile(),Zug.getSpalte(), ich, gegner);
 		//return besterPfad.get(besterPfad.size()-1);
 		return Zug;
 		
 	 }
 	
-	public ArrayList<Zug> berechneNächsterZug(Farbe[][] brett, Farbe ich, Farbe gegner, int Tiefe, ArrayList<Zug> BesterPfad) {
+	public ArrayList<Zug> berechneNächsterZug(Farbe[][] brett, Farbe ich, Farbe gegner, int Tiefe, ArrayList<Zug> AktuellerPfad, ArrayList<Zug> BesterPfad) {
 		ArrayList<Zug> ZugListe = new ArrayList<Zug>();
 		for(int i = 0; i <= 7; i++) {
 			for(int j = 0; j <= 7; j++) {
@@ -94,7 +103,7 @@ public class Spieler implements OthelloSpieler
 		if(ZugListe.isEmpty()) {
 			Zug Pass = new Zug(-1,-1);
 			Pass.setPassen();
-			BesterPfad.add(Pass);
+			BesterPfad.set(Tiefe, Pass);
 			return BesterPfad;
 		}
 				
@@ -110,35 +119,39 @@ public class Spieler implements OthelloSpieler
 					Zug = z;
 				}
 			}
-			BesterPfad.add(Zug);
+			AktuellerPfad.set(Tiefe, Zug);
+			
+			if(getZugListeValue(AktuellerPfad) > getZugListeValue(BesterPfad)) {
+				BesterPfad = AktuellerPfad;
+			}
+			
+			
 			return BesterPfad;
 		}else {
-			Zug besterZug = new Zug(-1,-1);
-			int Value = -1000;
 			for(Zug y : ZugListe) {
-				int tempValue=0;
-				int flipper = 1;
-				if((Tiefe&1) == 1) {
-					flipper = -1;
-				}
-				for(Zug z : berechneNächsterZug(aktualisiereBrett(brett, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich, Tiefe++, BesterPfad)) {
-					tempValue += getValue(z)*flipper;
-					flipper *= -1;
-				}
-				if(tempValue > Value) {
-					besterZug = y;
-					Value = tempValue;
-				}
+				AktuellerPfad.set(Tiefe, y);
+				BesterPfad = berechneNächsterZug(aktualisiereBrett(brett, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich, (Tiefe+1), AktuellerPfad, BesterPfad);
 			}
-			BesterPfad.add(besterZug);
 			return BesterPfad;
 		}
 		
 	}
 	
+	public int getZugListeValue(ArrayList<Zug> ZugListe) {
+		int flipper = 1;
+		int Value = 0;
+		for(Zug z : ZugListe) {
+			Value += (getValue(z) * flipper);
+			flipper *= -1;
+		}		
+		return Value;
+	}
+	
 	public int getValue(Zug z) {
 		if(z.getPassen() == true) {
 			return PassValue;
+		}else if(z.getSpalte() == -5) {
+			return -1000;
 		}else {
 			return Values[z.getZeile()][z.getSpalte()];
 		}
