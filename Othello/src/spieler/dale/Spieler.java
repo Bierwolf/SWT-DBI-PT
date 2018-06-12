@@ -81,7 +81,7 @@ public class Spieler implements OthelloSpieler
 		    	add(new Zug(-5,-5));
 		    }
 		}};
-		//ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, 0, list, currentlist);
+		ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, 0, list, currentlist);
 		brett = aktualisiereBrett(brett, Zug.getZeile(),Zug.getSpalte(), ich, gegner);
 		//return besterPfad.get(besterPfad.size()-1);
 		return Zug;
@@ -122,7 +122,8 @@ public class Spieler implements OthelloSpieler
 			AktuellerPfad.set(Tiefe, Zug);
 			
 			if(getZugListeValue(AktuellerPfad) > getZugListeValue(BesterPfad)) {
-				BesterPfad = AktuellerPfad;
+				BesterPfad.clear();
+				BesterPfad.addAll(AktuellerPfad);
 			}
 			
 			
@@ -138,6 +139,9 @@ public class Spieler implements OthelloSpieler
 	}
 	
 	public int getZugListeValue(ArrayList<Zug> ZugListe) {
+		if(ZugListe.get(0).getZeile() == -5) {
+			return -1000;
+		}
 		int flipper = 1;
 		int Value = 0;
 		for(Zug z : ZugListe) {
