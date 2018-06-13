@@ -20,7 +20,7 @@ public class Spieler implements OthelloSpieler
 								{-4,-8,-4,2,2,-4,-8,-4},
 								{30,-4,12,10,10,12,-4,30}			
 								};
-	private int PassValue = -4;
+	private int PassValue = -10;
 	Farbe ich;
 	Farbe gegner;
 	
@@ -86,7 +86,7 @@ public class Spieler implements OthelloSpieler
 		    	currentlist.add(new Zug(-5,-5));
 		    }
 		}
-		ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, Rekursionstiefe, currentlist, list);
+		ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, 0, currentlist, list);
 		Zug Zug = besterPfad.get(0);
 		brett = aktualisiereBrett(brett, Zug.getZeile(), Zug.getSpalte(), ich, gegner);
 		//return besterPfad.get(besterPfad.size()-1);
