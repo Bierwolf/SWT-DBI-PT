@@ -9,7 +9,7 @@ public class Spieler implements OthelloSpieler
 	public Spieler() {};
 	
 	static int groesse = 8;
-	int Rekursionstiefe = 1;
+	int Rekursionstiefe = 4;
 	private Farbe [][] globalesBrett = new Farbe [groesse][groesse];
 	private int[][] Values = { 	{30,-4,12,10,10,12,-4,30},
 								{-4,-8,-4,2,2,-4,-8,-4},
@@ -86,7 +86,13 @@ public class Spieler implements OthelloSpieler
 //		    	currentlist.add(new Zug(-5,-5));
 //		    }
 //		}
-		Farbe[][] brettCopy = globalesBrett.clone();
+		Farbe[][] brettCopy = new Farbe[groesse][groesse];
+		for(int i = 0; i < groesse; i++) {
+			for(int j = 0; j < groesse; j++) {
+				brettCopy[i][j] = globalesBrett[i][j];
+			}
+		}
+		
 		ArrayList<Zug> besterPfad = berechneNächsterZug(brettCopy, ich, gegner, 0, new ArrayList<Zug>(), new ArrayList<Zug>());
 		Zug Zug = besterPfad.get(0);
 		globalesBrett = aktualisiereBrett(globalesBrett, Zug.getZeile(), Zug.getSpalte(), ich, gegner);
@@ -155,7 +161,13 @@ public class Spieler implements OthelloSpieler
 					}else {
 						AktuellerPfad.set(Tiefe, y);					
 					}
-					BesterPfad = berechneNächsterZug(aktualisiereBrett(brett, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich, (Tiefe+1), AktuellerPfad, BesterPfad);		
+					Farbe[][] brettCopy = new Farbe[groesse][groesse];
+					for(int i = 0; i < groesse; i++) {
+						for(int j = 0; j < groesse; j++) {
+							brettCopy[i][j] = globalesBrett[i][j];
+						}
+					}
+					BesterPfad = berechneNächsterZug(aktualisiereBrett(brettCopy, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich, (Tiefe+1), AktuellerPfad, BesterPfad);		
 				}
 			}
 			return BesterPfad;
