@@ -1,7 +1,6 @@
 package spieler.dale;
 
 import java.util.ArrayList;
-import java.util.concurrent.ThreadLocalRandom;
 
 import spieler.*;
 
@@ -10,7 +9,7 @@ public class Spieler implements OthelloSpieler
 	public Spieler() {};
 	
 	static int groesse = 8;
-	int Rekursionstiefe = 3;
+	int Rekursionstiefe = 4;
 	private Farbe [][] brett = new Farbe [groesse][groesse];
 	private int[][] Values = { 	{30,-4,12,10,10,12,-4,30},
 								{-4,-8,-4,2,2,-4,-8,-4},
@@ -21,7 +20,7 @@ public class Spieler implements OthelloSpieler
 								{-4,-8,-4,2,2,-4,-8,-4},
 								{30,-4,12,10,10,12,-4,30}			
 								};
-	private int PassValue = -6;
+	private int PassValue = -4;
 	Farbe ich;
 	Farbe gegner;
 	
@@ -60,7 +59,6 @@ public class Spieler implements OthelloSpieler
 //			Pass.setPassen();
 //			return Pass;
 //		}
-//		//Zug Zug = ZugListe.get(ThreadLocalRandom.current().nextInt(0, ZugListe.size()));
 //		Zug Zug = new Zug(-1,-1);
 //		for(Zug z : ZugListe) {
 //			if(Zug.getZeile() == -1)
@@ -71,19 +69,26 @@ public class Spieler implements OthelloSpieler
 //			}
 //			
 //		}
-//		ArrayList<Zug> list = new ArrayList<Zug>() {{
-//		    for(int i = 0; i <= Rekursionstiefe; i++) {
-//		    	add(new Zug(-5,-5));
-//		    }
-//		}};
-//		ArrayList<Zug> currentlist = new ArrayList<Zug>() {{
-//		    for(int i = 0; i <= Rekursionstiefe; i++) {
-//		    	add(new Zug(-5,-5));
-//		    }
-//		}};
-		ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, 0, new ArrayList<Zug>(), new ArrayList<Zug>());
+		ArrayList<Zug> list = new ArrayList<Zug>();
+		if(list.isEmpty())
+		{
+		for(int i = 0; i <= Rekursionstiefe; i++) 
+		    {
+		    	list.add(new Zug(-5,-5));
+		    }
+		}
+		
+		ArrayList<Zug> currentlist = new ArrayList<Zug>();
+		if(currentlist.isEmpty())
+		{
+		for(int i = 0; i <= Rekursionstiefe; i++) 
+		    {
+		    	currentlist.add(new Zug(-5,-5));
+		    }
+		}
+		ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, Rekursionstiefe, currentlist, list);
 		Zug Zug = besterPfad.get(0);
-		brett = aktualisiereBrett(brett, Zug.getZeile(),Zug.getSpalte(), ich, gegner);
+		brett = aktualisiereBrett(brett, Zug.getZeile(), Zug.getSpalte(), ich, gegner);
 		//return besterPfad.get(besterPfad.size()-1);
 		return Zug;
 		
