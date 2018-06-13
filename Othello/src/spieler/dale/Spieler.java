@@ -9,8 +9,8 @@ public class Spieler implements OthelloSpieler
 	public Spieler() {};
 	
 	static int groesse = 8;
-	int Rekursionstiefe = 4;
-	private Farbe [][] brett = new Farbe [groesse][groesse];
+	int Rekursionstiefe = 1;
+	private Farbe [][] globalesBrett = new Farbe [groesse][groesse];
 	private int[][] Values = { 	{30,-4,12,10,10,12,-4,30},
 								{-4,-8,-4,2,2,-4,-8,-4},
 								{12,-4,2,2,2,2,-4,12},
@@ -29,12 +29,12 @@ public class Spieler implements OthelloSpieler
 	    for (int zeile = 0; zeile < groesse; zeile++)
 	    {
 	      for (int spalte = 0; spalte < groesse; spalte++)
-	        brett[zeile][spalte] = Farbe.LEER;
+	        globalesBrett[zeile][spalte] = Farbe.LEER;
 	    }
-	    brett[3][3] = Farbe.WEISS;
-	    brett[3][4] = Farbe.SCHWARZ;
-	    brett[4][3] = Farbe.SCHWARZ;
-	    brett[4][4] = Farbe.WEISS;
+	    globalesBrett[3][3] = Farbe.WEISS;
+	    globalesBrett[3][4] = Farbe.SCHWARZ;
+	    globalesBrett[4][3] = Farbe.SCHWARZ;
+	    globalesBrett[4][4] = Farbe.WEISS;
 	  }
 	
 	@Override
@@ -44,7 +44,7 @@ public class Spieler implements OthelloSpieler
 	 {
 //		ArrayList<Zug> ZugListe = new ArrayList<Zug>();
 		if(vorherigerZug != null && vorherigerZug.getPassen() != true)
-			brett = aktualisiereBrett(brett, vorherigerZug.getZeile(), vorherigerZug.getSpalte(), gegner, ich);
+			globalesBrett = aktualisiereBrett(globalesBrett, vorherigerZug.getZeile(), vorherigerZug.getSpalte(), gegner, ich);
 //		for(int i = 0; i <= 7; i++) {
 //			for(int j = 0; j <= 7; j++) {
 //				if(legalerZug(brett, i, j, ich, gegner)) {
@@ -69,26 +69,27 @@ public class Spieler implements OthelloSpieler
 //			}
 //			
 //		}
-		ArrayList<Zug> list = new ArrayList<Zug>();
-		if(list.isEmpty())
-		{
-		for(int i = 0; i <= Rekursionstiefe; i++) 
-		    {
-		    	list.add(new Zug(-5,-5));
-		    }
-		}
-		
-		ArrayList<Zug> currentlist = new ArrayList<Zug>();
-		if(currentlist.isEmpty())
-		{
-		for(int i = 0; i <= Rekursionstiefe; i++) 
-		    {
-		    	currentlist.add(new Zug(-5,-5));
-		    }
-		}
-		ArrayList<Zug> besterPfad = berechneNächsterZug(brett, ich, gegner, 0, currentlist, list);
+//		ArrayList<Zug> list = new ArrayList<Zug>();
+//		if(list.isEmpty())
+//		{
+//		for(int i = 0; i <= Rekursionstiefe; i++) 
+//		    {
+//		    	list.add(new Zug(-5,-5));
+//		    }
+//		}
+//		
+//		ArrayList<Zug> currentlist = new ArrayList<Zug>();
+//		if(currentlist.isEmpty())
+//		{
+//		for(int i = 0; i <= Rekursionstiefe; i++) 
+//		    {
+//		    	currentlist.add(new Zug(-5,-5));
+//		    }
+//		}
+		Farbe[][] brettCopy = globalesBrett.clone();
+		ArrayList<Zug> besterPfad = berechneNächsterZug(brettCopy, ich, gegner, 0, new ArrayList<Zug>(), new ArrayList<Zug>());
 		Zug Zug = besterPfad.get(0);
-		brett = aktualisiereBrett(brett, Zug.getZeile(), Zug.getSpalte(), ich, gegner);
+		globalesBrett = aktualisiereBrett(globalesBrett, Zug.getZeile(), Zug.getSpalte(), ich, gegner);
 		//return besterPfad.get(besterPfad.size()-1);
 		return Zug;
 		
