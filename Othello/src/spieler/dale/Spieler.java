@@ -19,7 +19,6 @@ public class Spieler implements OthelloSpieler {
 							   {-4,-8,-4, 2, 2,-4,-8,-4},
 							   {30,-4,12,10,10,12,-4,30} 
 							 };
-	private int PassValue = -6;
 	Farbe ich;
 	Farbe gegner;
 	
@@ -304,7 +303,7 @@ public class Spieler implements OthelloSpieler {
 				}
 			}
 		}
-		Collections.shuffle(ZugListe);
+//		Collections.shuffle(ZugListe);
 
 		if (Tiefe == Rekursionstiefe) {
 			if (ZugListe.isEmpty()) {
@@ -314,7 +313,7 @@ public class Spieler implements OthelloSpieler {
 					Farbe[][] brettCopy = new Farbe[groesse][groesse];
 					for (int i = 0; i < groesse; i++) {
 						for (int j = 0; j < groesse; j++) {
-							brettCopy[i][j] = globalesBrett[i][j];
+							brettCopy[i][j] = brett[i][j];
 						}
 					}
 					int temp = getBrettValue(aktualisiereBrett(brettCopy, z.getZeile(), z.getSpalte(), ich, gegner), ich, gegner);
@@ -351,20 +350,13 @@ public class Spieler implements OthelloSpieler {
 				}
 			} else {
 				for (Zug y : ZugListe) {
-//					if (AktuellerPfad.size() - 1 < Tiefe) {
-//						AktuellerPfad.add(y);
-//					} else {
-//						AktuellerPfad.set(Tiefe, y);
-//					}
+					
 					Farbe[][] brettCopy = new Farbe[groesse][groesse];
 					for (int i = 0; i < groesse; i++) {
 						for (int j = 0; j < groesse; j++) {
 							brettCopy[i][j] = brett[i][j];
 						}
 					}
-//					BesterPfad = berechneNächsterZug(
-//							aktualisiereBrett(brettCopy, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich,
-//							(Tiefe + 1), AktuellerPfad, BesterPfad);
 					int temp = berechneNächsterZug(aktualisiereBrett(brettCopy, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich,
 							(Tiefe + 1));
 					if((Tiefe & 1) == 0) {
@@ -375,29 +367,12 @@ public class Spieler implements OthelloSpieler {
 						if( temp < value) {
 							value = temp; 
 						}
-					}
-					
+					}					
 				}
 			}
 			return value;
 		}
 
-	}
-
-	public int getZugListeValue(ArrayList<Zug> ZugListe) {
-		// if(ZugListe.get(0).getZeile() == -5) {
-		// return -1000;
-		// }
-		if (ZugListe.isEmpty()) {
-			return -1000;
-		}
-		int flipper = 1;
-		int Value = 0;
-		for (Zug z : ZugListe) {
-			Value += (getValue(z) * flipper);
-			flipper *= -1;
-		}
-		return Value;
 	}
 	
 	public int getBrettValue(Farbe [][] brett, Farbe ich, Farbe gegner) {
@@ -418,16 +393,6 @@ public class Spieler implements OthelloSpieler {
 		return value;
 	}
 
-	public int getValue(Zug z) {
-		if (z.getPassen() == true) {
-			return PassValue;
-		} else if (z.getSpalte() == -5) {
-			return -1000;
-		} else {
-			return Values[z.getZeile()][z.getSpalte()];
-		}
-	}
-
 	@Override
 	public Zug berechneZug(Zug vorherigerZug, long zeitWeiss, long zeitSchwarz) throws ZugException {
 		
@@ -443,7 +408,7 @@ public class Spieler implements OthelloSpieler {
 		 		}
 		 	}
 		 }
-		 Collections.shuffle(ZugListe);
+//		 Collections.shuffle(ZugListe);
 		 
 		 if(ZugListe.isEmpty()) {
 			 Zug Pass = new Zug(-1,-1);
