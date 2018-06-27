@@ -429,18 +429,11 @@ public class Spieler implements OthelloSpieler {
 			}
 		}
 		Zug Zug = new Zug(5, 5);
-		int value = -1000;
-<<<<<<< HEAD
-		for(Zug z : ZugListe) {
+		int value = -1000;		for(Zug z : ZugListe) {
 			int temp = berechneNächsterZug(aktualisiereBrett(brettCopy, z.getZeile(), z.getSpalte(),
 					ich , gegner), gegner, ich, 0);
 			if(temp > value) {
-=======
-		for (Zug z : ZugListe) {
-			int temp = berechneNächsterZug(aktualisiereBrett(brettCopy, z.getZeile(), z.getSpalte(), ich, gegner),
-					gegner, ich, 0);
-			if (temp >= value) {
->>>>>>> aaba805337383aa3c063cee483f8b559ae35dea6
+
 				Zug = z;
 				value = temp;
 			}
