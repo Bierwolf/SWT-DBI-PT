@@ -366,12 +366,12 @@ public class Spieler implements OthelloSpieler {
 					if ((Tiefe & 1) == 0) {
 						if (temp > value) {
 							value = temp;
-							if(value > alpha) {
-								alpha = value;
-							}
-							if(alpha >= beta) {
-								return 5000;
-							}
+						}
+						if(value > alpha) {
+							alpha = value;
+						}
+						if(alpha >= beta) {
+							return 5000;
 						}
 					} else {
 						if (temp < value) {
