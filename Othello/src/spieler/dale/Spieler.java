@@ -1,6 +1,7 @@
 package spieler.dale;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 import spieler.*;
 
@@ -292,8 +293,8 @@ public class Spieler implements OthelloSpieler {
 	}
 
 	public int berechneNächsterZug(Farbe[][] brett, Farbe ich, Farbe gegner, int Tiefe, int alpha, int beta) {
-		int value = -1000;
-		if ((Tiefe & 1) == 1) {
+		int value = 1000;
+		if ((Tiefe & 1) == 0) {
 			value *= -1;
 		}
 		ArrayList<Zug> ZugListe = new ArrayList<Zug>();
@@ -444,11 +445,11 @@ public class Spieler implements OthelloSpieler {
 			}
 		}
 		Zug Zug = new Zug(5, 5);
-		int value = -1000;		for(Zug z : ZugListe) {
+		int value = -1000;		
+		for(Zug z : ZugListe) {
 			int temp = berechneNächsterZug(aktualisiereBrett(brettCopy, z.getZeile(), z.getSpalte(),
 					ich , gegner), gegner, ich, 0, alpha, beta);
 			if(temp > value) {
-
 				Zug = z;
 				value = temp;
 			}
