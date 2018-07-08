@@ -298,7 +298,7 @@ public class Spieler implements OthelloSpieler {
 			value *= -1;
 		}
 		if (Tiefe == Rekursionstiefe) {
-			return getBrettValue(brett, ich, gegner);
+			return getBrettValue(brett);
 		} else {
 			ArrayList<Zug> ZugListe = new ArrayList<Zug>();
 			for (int i = 0; i <= 7; i++) {
@@ -329,7 +329,6 @@ public class Spieler implements OthelloSpieler {
 				}
 			} else {
 				for (Zug y : ZugListe) {
-
 					Farbe[][] brettCopy = new Farbe[groesse][groesse];
 					for (int i = 0; i < groesse; i++) {
 						for (int j = 0; j < groesse; j++) {
@@ -367,7 +366,7 @@ public class Spieler implements OthelloSpieler {
 
 	}
 
-	public int getBrettValue(Farbe[][] brett, Farbe ich, Farbe gegner) {
+	public int getBrettValue(Farbe[][] brett) {
 		int value = 0;
 		for (int i = 0; i < groesse; i++) {
 			{

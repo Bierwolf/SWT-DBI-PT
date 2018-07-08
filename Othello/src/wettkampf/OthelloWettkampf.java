@@ -11,7 +11,7 @@ public class OthelloWettkampf {
 		List<OthelloSpieler> spieler = new ArrayList<OthelloSpieler>();
 //		spieler.add(new spieler.dale.Spieler(7));
 //		spieler.add(new spieler.Referenzspieler(7));
-		spieler.add(new spieler.dale.Spieler(7));
+//		spieler.add(new spieler.dale.Spieler(7));
 //		spieler.add(new spieler.dale.Spieler(5));
 		spieler.add(new spieler.dale.Spieler(4));
 		spieler.add(new spieler.dale.Spieler(3));
