@@ -294,12 +294,8 @@ public class Spieler implements OthelloSpieler {
 
 	public int berechneNächsterZug(Farbe[][] brett, Farbe ich, Farbe gegner, int Tiefe, int alpha, int beta, boolean maximierer) {
 		int value = 1000;
-		boolean maximiererNeu = true;
 		if (maximierer) {
 			value *= -1;
-			maximiererNeu = false;
-		}else {
-			maximiererNeu = true;
 		}
 		if (Tiefe == Rekursionstiefe) {
 			return getBrettValue(brett, ich, gegner);
@@ -320,7 +316,7 @@ public class Spieler implements OthelloSpieler {
 						brettCopy[i][j] = brett[i][j];
 					}
 				}
-				int temp = berechneNächsterZug(brettCopy, gegner, ich, (Tiefe + 1), alpha, beta, maximiererNeu);
+				int temp = berechneNächsterZug(brettCopy, gegner, ich, (Tiefe + 1), alpha, beta, !maximierer);
 
 				if (maximierer) {
 					if (temp > value) {
@@ -342,7 +338,7 @@ public class Spieler implements OthelloSpieler {
 					}
 					int temp = berechneNächsterZug(
 							aktualisiereBrett(brettCopy, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich,
-							(Tiefe + 1), alpha, beta, maximiererNeu);
+							(Tiefe + 1), alpha, beta, !maximierer);
 					if (maximierer) {
 						if (temp > value) {
 							value = temp;
