@@ -292,47 +292,27 @@ public class Spieler implements OthelloSpieler {
 		return false;
 	}
 
-	public int berechneNächsterZug(Farbe[][] brett, Farbe ich, Farbe gegner, int Tiefe, int alpha, int beta) {
+	public int berechneNächsterZug(Farbe[][] brett, Farbe ich, Farbe gegner, int Tiefe, int alpha, int beta, boolean maximierer) {
 		int value = 1000;
-		if ((Tiefe & 1) == 0) {
+		boolean maximiererNeu = true;
+		if (maximierer) {
 			value *= -1;
+			maximiererNeu = false;
+		}else {
+			maximiererNeu = true;
 		}
-		ArrayList<Zug> ZugListe = new ArrayList<Zug>();
-		for (int i = 0; i <= 7; i++) {
-			for (int j = 0; j <= 7; j++) {
-				if (legalerZug(brett, i, j, ich, gegner)) {
-					ZugListe.add(new Zug(i, j));
-				}
-			}
-		}
-		// Collections.shuffle(ZugListe);
-
 		if (Tiefe == Rekursionstiefe) {
-			if (ZugListe.isEmpty()) {
-				return getBrettValue(brett, ich, gegner);
-			} else {
-				for (Zug z : ZugListe) {
-					Farbe[][] brettCopy = new Farbe[groesse][groesse];
-					for (int i = 0; i < groesse; i++) {
-						for (int j = 0; j < groesse; j++) {
-							brettCopy[i][j] = brett[i][j];
-						}
-					}
-					int temp = getBrettValue(aktualisiereBrett(brettCopy, z.getZeile(), z.getSpalte(), ich, gegner),
-							ich, gegner);
-					if ((Tiefe & 1) == 0) {
-						if (temp > value) {
-							value = temp;
-						}
-					} else {
-						if (temp < value) {
-							value = temp;
-						}
+			return getBrettValue(brett, ich, gegner);
+		} else {
+			ArrayList<Zug> ZugListe = new ArrayList<Zug>();
+			for (int i = 0; i <= 7; i++) {
+				for (int j = 0; j <= 7; j++) {
+					if (legalerZug(brett, i, j, ich, gegner)) {
+						ZugListe.add(new Zug(i, j));
 					}
 				}
-				return value;
 			}
-		} else {
+			Collections.shuffle(ZugListe);
 			if (ZugListe.isEmpty()) {
 				Farbe[][] brettCopy = new Farbe[groesse][groesse];
 				for (int i = 0; i < groesse; i++) {
@@ -340,9 +320,9 @@ public class Spieler implements OthelloSpieler {
 						brettCopy[i][j] = brett[i][j];
 					}
 				}
-				int temp = berechneNächsterZug(brettCopy, gegner, ich, (Tiefe + 1), alpha, beta);
+				int temp = berechneNächsterZug(brettCopy, gegner, ich, (Tiefe + 1), alpha, beta, maximiererNeu);
 
-				if ((Tiefe & 1) == 0) {
+				if (maximierer) {
 					if (temp > value) {
 						value = temp;
 					}
@@ -362,8 +342,8 @@ public class Spieler implements OthelloSpieler {
 					}
 					int temp = berechneNächsterZug(
 							aktualisiereBrett(brettCopy, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich,
-							(Tiefe + 1), alpha, beta);
-					if ((Tiefe & 1) == 0) {
+							(Tiefe + 1), alpha, beta, maximiererNeu);
+					if (maximierer) {
 						if (temp > value) {
 							value = temp;
 						}
@@ -448,7 +428,7 @@ public class Spieler implements OthelloSpieler {
 		int value = -1000;		
 		for(Zug z : ZugListe) {
 			int temp = berechneNächsterZug(aktualisiereBrett(brettCopy, z.getZeile(), z.getSpalte(),
-					ich , gegner), gegner, ich, 0, alpha, beta);
+					ich , gegner), gegner, ich, 0, alpha, beta, false);
 			if(temp > value) {
 				Zug = z;
 				value = temp;
