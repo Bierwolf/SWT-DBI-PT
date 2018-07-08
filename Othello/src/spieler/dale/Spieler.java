@@ -20,6 +20,8 @@ public class Spieler implements OthelloSpieler {
 							 };
 	Farbe ich;
 	Farbe gegner;
+	int alpha = -5000;
+	int beta = 5000;
 
 	public Spieler(int Halbschritte) {
 		this.Rekursionstiefe = Halbschritte;
@@ -289,7 +291,7 @@ public class Spieler implements OthelloSpieler {
 		return false;
 	}
 
-	public int berechneNächsterZug(Farbe[][] brett, Farbe ich, Farbe gegner, int Tiefe) {
+	public int berechneNächsterZug(Farbe[][] brett, Farbe ich, Farbe gegner, int Tiefe, int alpha, int beta) {
 		int value = -1000;
 		if ((Tiefe & 1) == 1) {
 			value *= -1;
@@ -337,7 +339,7 @@ public class Spieler implements OthelloSpieler {
 						brettCopy[i][j] = brett[i][j];
 					}
 				}
-				int temp = berechneNächsterZug(brettCopy, gegner, ich, (Tiefe + 1));
+				int temp = berechneNächsterZug(brettCopy, gegner, ich, (Tiefe + 1), alpha, beta);
 
 				if ((Tiefe & 1) == 0) {
 					if (temp > value) {
@@ -359,14 +361,26 @@ public class Spieler implements OthelloSpieler {
 					}
 					int temp = berechneNächsterZug(
 							aktualisiereBrett(brettCopy, y.getZeile(), y.getSpalte(), ich, gegner), gegner, ich,
-							(Tiefe + 1));
+							(Tiefe + 1), alpha, beta);
 					if ((Tiefe & 1) == 0) {
 						if (temp > value) {
 							value = temp;
+							if(value > alpha) {
+								alpha = value;
+							}
+							if(alpha >= beta) {
+								return 5000;
+							}
 						}
 					} else {
 						if (temp < value) {
 							value = temp;
+						}
+						if(value < beta) {
+							beta = value;
+						}
+						if(alpha >= beta) {
+							return -5000;
 						}
 					}
 				}
@@ -400,7 +414,8 @@ public class Spieler implements OthelloSpieler {
 		if (vorherigerZug != null && vorherigerZug.getPassen() != true)
 			globalesBrett = aktualisiereBrett(globalesBrett, vorherigerZug.getZeile(), vorherigerZug.getSpalte(),
 					gegner, ich);
-
+		alpha = -5000;
+		beta = 5000;
 		ArrayList<Zug> ZugListe = new ArrayList<Zug>();
 		for (int i = 0; i <= 7; i++) {
 			for (int j = 0; j <= 7; j++) {
@@ -431,7 +446,7 @@ public class Spieler implements OthelloSpieler {
 		Zug Zug = new Zug(5, 5);
 		int value = -1000;		for(Zug z : ZugListe) {
 			int temp = berechneNächsterZug(aktualisiereBrett(brettCopy, z.getZeile(), z.getSpalte(),
-					ich , gegner), gegner, ich, 0);
+					ich , gegner), gegner, ich, 0, alpha, beta);
 			if(temp > value) {
 
 				Zug = z;
