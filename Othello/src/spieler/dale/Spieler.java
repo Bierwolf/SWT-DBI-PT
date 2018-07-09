@@ -23,7 +23,7 @@ public class Spieler implements OthelloSpieler {
 	int beta = 5000;
 	
 	/**
-	 * Konstrukter für bestimmte Rechentiefe
+	 * Konstruktor für bestimmte Rechentiefe
 	 * @param Halbschritte	Rechentiefe in Halbschritten
 	 */
 	public Spieler(int Halbschritte) {
@@ -60,7 +60,7 @@ public class Spieler implements OthelloSpieler {
 	 * @param s	Spalte des gelegten Zugs
 	 * @param ich Spieler, der den Zug gelegt hat
 	 * @param gegner Spieler, der nicht gelegt hat
-	 * @return	Aktualisiertes Brett
+	 * @return ein aktualisiertes Brett
 	 */
 	public Farbe[][] aktualisiereBrett(Farbe[][] brett, int z, int s, Farbe ich, Farbe gegner) {
 		if (z == -1 || s == -1) {
@@ -397,10 +397,10 @@ public class Spieler implements OthelloSpieler {
 		for (int i = 0; i < groesse; i++) {
 				for (int j = 0; j < groesse; j++) {
 					if (brett[i][j] == ich) {
-						value += Values[i][j];
+						value += Values[i][j];	//Werte mit unseren Steinen werden addiert
 					}
 					if (brett[i][j] == gegner) {
-						value -= Values[i][j];
+						value -= Values[i][j];	//Werte des Gegners werden hingegen subtrahiert
 					}
 				}
 			}
