@@ -4,6 +4,9 @@ import java.util.ArrayList;
 import spieler.*;
 
 public class Spieler implements OthelloSpieler {
+	/**
+	 * @author Daniel Groﬂenbach, Lennart Bierwolf
+	 */
 	String name;
 	static int groesse = 8;
 	int Rekursionstiefe = 4;
