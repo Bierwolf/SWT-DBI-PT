@@ -13,11 +13,11 @@ public class OthelloWettkampf {
 //		spieler.add(new spieler.Referenzspieler(7));
 //		spieler.add(new spieler.dale.Spieler(7));
 //		spieler.add(new spieler.dale.Spieler(5));
-		spieler.add(new spieler.dale.Spieler(4));
-		spieler.add(new spieler.dale.Spieler(3));
-		spieler.add(new spieler.dale.Spieler(2));
+		spieler.add(new spieler.Grossenbier.Spieler(4));
+		spieler.add(new spieler.Grossenbier.Spieler(3));
+		spieler.add(new spieler.Grossenbier.Spieler(2));
 //		spieler.add(new spieler.dale.Spieler(7));
-		spieler.add(new spieler.dale.Spieler(5));
+		spieler.add(new spieler.Grossenbier.Spieler(5));
 		
 		new rahmen.OthelloArena(1050, spieler, false);
 	}

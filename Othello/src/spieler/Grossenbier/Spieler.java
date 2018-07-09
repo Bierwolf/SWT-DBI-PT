@@ -1,4 +1,4 @@
-package spieler.dale;
+package spieler.Grossenbier;
 
 import java.util.ArrayList;
 import spieler.*;
