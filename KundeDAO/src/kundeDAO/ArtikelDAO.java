@@ -45,15 +45,15 @@ public class ArtikelDAO extends AbstractDao<Artikel>{
  
     /** Methode zum Laden eines Artikels in den Speicher aus dem Resultset */
     private Artikel load(ResultSet rs) throws SQLException {
-        Long kdnr = new Long(rs.getLong(1));
-        Artikel result = (Artikel) cache.get(kdnr);
+        Long id = new Long(rs.getLong(1));
+        Artikel result = (Artikel) cache.get(id);
         if (result != null) {
             return result;
         }
         String name = rs.getString(2);
-        int kundengruppe = rs.getInt(3);
-        result = new Artikel(kdnr, name, kundengruppe);
-        cache.put(kdnr, result);
+        int preis = rs.getInt(3);
+        result = new Artikel(id, name, preis);
+        cache.put(id, result);
         return result;
     }
     private final static String updateStatementString =
