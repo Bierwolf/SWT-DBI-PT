@@ -2,7 +2,7 @@ package framework;
 
 import java.sql.SQLException;
 
-public interface Dao<T> {
+public interface Dao<T extends Identifizierbar> {
 	void create(T t) throws SQLException;
 	T read(long id)throws SQLException;
 	void update(T t)throws SQLException;
