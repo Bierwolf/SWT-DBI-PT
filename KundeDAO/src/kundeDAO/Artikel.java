@@ -19,7 +19,7 @@ public class Artikel implements Identifizierbar{
         artikelDAO.create(this);
     }
 
-    public void setAertikelnummer(Long artikelnummer) throws SQLException {
+    public void setArtikelnummer(Long artikelnummer) throws SQLException {
         this.artikelnr = artikelnummer;
         artikelDAO.update(this);
     }

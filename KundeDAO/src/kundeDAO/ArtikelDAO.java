@@ -37,7 +37,7 @@ public class ArtikelDAO extends AbstractDao<Artikel>{
             "INSERT INTO ARTIKEL VALUES(?, ?, ?)";
 
     private final static String findStatementString =
-            "SELECT ATNR, NAME, PREIS FROM Artikel WHERE ATNR=?";
+            "SELECT ATNR, NAME, PREIS FROM Artikel WHERE ATNR = ?";
 
  
     /** Methode zum Laden eines Artikels in den Speicher aus dem Resultset */
