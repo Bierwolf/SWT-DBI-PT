@@ -10,6 +10,9 @@ public class ArtikelDAOTest {
     	
         System.out.println("Erzeuge einen Artikel");
         Artikel derArtikel = new Artikel(4711l, "Kuchen", 1);
+        Artikel derzweiteArtikel = new Artikel((long) 471l, "Kuchen", 1);
+        Artikel derdritteArtikel = new Artikel((long) 1337, "Platine", 14);
+        Artikel dervierteArtikel = new Artikel((long) 69, "Bett", 1);
         System.out.println("Setze lokale Variable auf NULL und hole Artikel zurück");
         derArtikel = null;
         derArtikel = Artikel.read(4711l);
