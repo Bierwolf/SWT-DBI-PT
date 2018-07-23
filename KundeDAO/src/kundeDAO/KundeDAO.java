@@ -17,8 +17,9 @@ public class KundeDAO {
     private KundeDAO() {
         try {
 
-            Class.forName("org.apache.derby.jdbc.ClientDriver");
-            db = DriverManager.getConnection("jdbc:derby://localhost:1527/xdb");
+//            Class.forName("org.apache.derby.jdbc.ClientDriver");
+//            db = DriverManager.getConnection("jdbc:derby://localhost:1527/xdb");
+			  db = DriverManager.getConnection("jdbc:mariadb://127.0.0.1:3306/tests", "dbi", "dbi_pass");        	
         } catch (Exception ex) {
             ex.printStackTrace();
         }
