@@ -5,7 +5,7 @@ import java.util.HashMap;
 
 public abstract class AbstractDao<T extends Identifizierbar> implements Dao<T> {
 
-	private HashMap<Long, T> cache = new HashMap<Long, T>();
+	protected HashMap<Long, T> cache = new HashMap<Long, T>();
 	
 	@Override
 	public void create(T t) throws SQLException{

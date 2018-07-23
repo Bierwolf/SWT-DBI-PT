@@ -8,10 +8,7 @@ import java.sql.*;
 
 public class ArtikelDAO extends AbstractDao<Artikel>{
 
-    /* Wir benoetigen eine Struktur, um uns alle schon im Speicher
-     * vorhandenen Artikel zu merken. 
-     */
-    private HashMap<Long, Artikel> cache = new HashMap<Long, Artikel>();
+    
     private Connection db;
     private ResultSet rs;
     
