@@ -1,7 +1,5 @@
 package kundeDAO;
 
-import java.util.*;
-
 import framework.AbstractDao;
 
 import java.sql.*;
