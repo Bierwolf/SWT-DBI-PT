@@ -28,9 +28,11 @@ public abstract class AbstractDao<T extends Identifizierbar> implements Dao<T> {
 
 	@Override
 	public void update(T t) throws SQLException{
-		// TODO Auto-generated method stub
-		
+		if(cache.containsKey(t.getId())) cache.replace(t.getId(), t);
+		doUpdate(t);		
 	}
+
+	protected abstract void doUpdate(T t) throws SQLException;
 
 	@Override
 	public void delete(T t) throws SQLException{
