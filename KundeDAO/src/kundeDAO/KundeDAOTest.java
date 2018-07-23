@@ -23,7 +23,7 @@ public class KundeDAOTest {
         kundeDAO.delete(derKunde);
         derKunde = null;
         System.out.println("Versuche den Kunden nach Löschung erneut zu lesen:");
-        derKunde = Kunde.read(4711l);
+//        derKunde = Kunde.read(4711l);
         System.out.println(derKunde);
 
     }
