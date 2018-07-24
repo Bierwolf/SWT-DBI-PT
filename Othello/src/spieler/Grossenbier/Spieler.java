@@ -9,7 +9,7 @@ public class Spieler implements OthelloSpieler {
 	 */
 	String name;
 	static int groesse = 8;
-	int Rekursionstiefe = 4;
+	int Rekursionstiefe = 6;
 	private Farbe[][] globalesBrett = new Farbe[groesse][groesse];	//das Brett, auf dem gespielt wird
 	private int[][] Values = { 	{30,-4,12,10,10,12,-4,30},
 								{-4,-8,-4, 2, 2,-4,-8,-4},
