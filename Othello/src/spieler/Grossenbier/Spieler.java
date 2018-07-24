@@ -369,10 +369,10 @@ public class Spieler implements OthelloSpieler {
 						if(value > alpha) {
 							alpha = value;
 						}
-						if(alpha >= beta) {	//Abbruchbedingung für das Alpha-Beta-Pruning, mit Rückgabe eiens ExtremWerts, damit der Teil des Baum vom nächsten Knoten dadrüber möglichst Ignoriert wird
+						if(alpha >= beta) {	//Abbruchbedingung für das Alpha-Beta-Pruning, mit Rückgabe eines Extremwerts, damit der Teil des Baum vom nächsten Knoten dadrüber möglichst Ignoriert wird
 							return 5000;
 						}
-					} else {	//Der aktuelle Wert mit dem Besten verglichen und im Falle einer Verbesserung(abhängig davon, ob der aktuelle Knoten ein Maximierer oder Minimierer ist) überschrieben, außerdem wird der alpha oder beta Wert im Falle einer Verbesserung(ebenfalls abhängig vom Maximierer/Minimierer) überschrieben
+					} else {	//Der aktuelle Wert mit dem Besten verglichen und im Falle einer Verbesserung (abhängig davon, ob der aktuelle Knoten ein Maximierer oder Minimierer ist) überschrieben, außerdem wird der alpha oder beta Wert im Falle einer Verbesserung(ebenfalls abhängig vom Maximierer/Minimierer) überschrieben
 						if (temp < value) {
 							value = temp;
 						}
@@ -436,7 +436,8 @@ public class Spieler implements OthelloSpieler {
 		if (vorherigerZug != null && vorherigerZug.getPassen() != true)
 			globalesBrett = aktualisiereBrett(globalesBrett, vorherigerZug.getZeile(), vorherigerZug.getSpalte(),
 					gegner, ich);	//aktualisiert das Brett, wenn es nicht der erste Zug war und nicht gepasst wurde
-		alpha = -5000;	//initialisiert die Alpha Beta Werte Neu
+		
+		alpha = -5000;	//Alpha- und Betawerte werden neu initialisiert
 		beta = 5000;
 		
 		ArrayList<Zug> ZugListe = getZugListe(globalesBrett, ich, gegner);
