@@ -334,7 +334,7 @@ public class Spieler implements OthelloSpieler {
 	 */
 	public int berechneNächsterZug(Farbe[][] brett, Farbe ich, Farbe gegner, int Tiefe, int alpha, int beta, boolean maximierer) {
 		int value = 1000;
-		if (maximierer) {	//ist der aktuelle Knote ein Maximierer, wird der Wert mit -100 initialisiert, sonst mit 1000
+		if (maximierer) {	//ist der aktuelle Knote ein Maximierer, wird der Wert mit -1000 initialisiert, sonst mit 1000
 			value *= -1;
 		}
 		if (Tiefe == Rekursionstiefe) {	//bei maximaler Rekursionstiefe, wird direkt der Wert zurückgegeben
@@ -415,7 +415,7 @@ public class Spieler implements OthelloSpieler {
 	 * @param brett Das zu prüfende Brett
 	 * @param ich der Spieler, der ziehen möchte
 	 * @param gegner der Spieler, der nicht ziehen möchte
-	 * @return	Eine List aller möglicher Züge
+	 * @return	Eine Liste aller möglicher Züge
 	 */
 	public ArrayList<Zug> getZugListe(Farbe[][] brett, Farbe ich, Farbe gegner) {
 		ArrayList<Zug> ZugListe = new ArrayList<Zug>();
