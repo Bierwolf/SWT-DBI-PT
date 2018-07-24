@@ -379,7 +379,7 @@ public class Spieler implements OthelloSpieler {
 						if(value < beta) {
 							beta = value;
 						}
-						if(alpha >= beta) {	//Abbruchbedingung für das Alpha-Beta-Pruning, mit Rückgabe eiens ExtremWerts, damit der Teil des Baum vom nächsten Knoten dadrüber möglichst Ignoriert wird
+						if(alpha >= beta) {	//Abbruchbedingung für das Alpha-Beta-Pruning, mit Rückgabe eiens Extremwerts, damit der Teil des Baum vom nächsten Knoten dadrüber möglichst Ignoriert wird
 							return -5000;
 						}
 					}
